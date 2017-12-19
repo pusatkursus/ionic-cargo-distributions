@@ -1,0 +1,69 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Home</ion-title>
+        <ion-buttons end>
+            <button mat-icon-button>
+            </button>
+            <button mat-menu-item>
+              LogOut
+            </button>
+
+        </ion-buttons>
+
+    </ion-navbar>
+
+    <ion-toolbar>
+        <ion-item>
+            <p item-start>smalltruck</p>
+            <p item-end>ka51c4750 </p>
+        </ion-item>
+    </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content class="padding-new">
+
+    <ion-card class="card-design" *ngFor="let trip of tripList.message">
+        <ion-list>
+            <ion-item no-lines style="cursor:pointer;" (click)="squeroot()">
+                <h3>{{trip.name}}</h3>
+                <p class="fontview"><span>{{trip.consigneeName}}</span> | <span>{{trip.consigneePhoneNo}}</span></p>
+                <p style="white-space: normal;">{{trip.locationAddress}} </p>
+            </ion-item>
+
+            <ion-item no-margin>
+                <ion-label no-margin> {{trip.weightTonnage}} tons </ion-label>
+                <ion-label no-margin> </ion-label>
+                <ion-list no-lines item-right>
+                    <button ion-button color="danger" clear icon-only>
+                    <ion-icon name='close-circle' style="color:red;" ></ion-icon>
+               </button>
+                    <button ion-button color="danger" clear icon-only>
+                  <ion-icon name='checkmark-circle' style="color:green" ></ion-icon>
+              </button>
+                </ion-list>
+            </ion-item>
+        </ion-list>
+    </ion-card>
+
+    <div>
+        <div style="height: 100%; width: 100%" #map id="map_canvas"></div>
+    </div>
+
+</ion-content>
+
+
+<ion-footer class="footer-ion">
+
+    <ion-segment>
+        <ion-segment-button (click)="setComponent(1)" class="segment-new" value="all">
+            <ion-icon class="icon-color" name="menu"></ion-icon>
+        </ion-segment-button>
+        <ion-segment-button (click)="setComponent(2)" class="segment-new" value="favorites">
+            <ion-icon class="icon-color" name="pin"></ion-icon>
+        </ion-segment-button>
+    </ion-segment>
+
+
+</ion-footer>

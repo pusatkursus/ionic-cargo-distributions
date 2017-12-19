@@ -1,0 +1,9 @@
+.aleart {
+    background-color: rgb(rgb(139, 110, 110), rgb(134, 235, 134), rgb(72, 72, 187));
+    color: black;
+    padding-top: 10px;
+   }
+   
+   .list-md .item-input:last-child{
+       border-bottom: none !important;
+   }
