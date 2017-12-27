@@ -22,7 +22,7 @@ export class TriplistComponent implements OnInit {
   @ViewChild('map') mapRef:ElementRef;
 
   tripName: string = "hello";
-  tripList = null;
+  tripList ={};
 
   constructor(private http: HttpClient, private auth: AuthService) { }
 
@@ -53,9 +53,7 @@ export class TriplistComponent implements OnInit {
        this.tripList = data;
       } 
       )
-
- 
-    //
+          //
     }
 
   DisplayMap(){
