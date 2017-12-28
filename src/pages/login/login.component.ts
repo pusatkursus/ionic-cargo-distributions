@@ -40,10 +40,17 @@ export class LoginComponent implements OnInit {
     urlSearchParams.append('grant_type','password');
     urlSearchParams.append('client_id','my-trusted-client');
 
-    this.http.post('/cargo/oauth/token',
+    this.http.post(this.auth.getRemoteUrl()+'/cargo/oauth/token',
     urlSearchParams.toString()).subscribe((data) => {
       this.auth.setToken(data);
+
+    this.http.get(this.auth.getRemoteUrl()+'/cargo/api/home?username='+usercreds.username).subscribe((data) => {
+      console.log(data);
+      this.auth.setUserId(data['message']['user_id'])
       this.navCtrl.push(TriplistComponent);
+      
+     } 
+     )
       
      // this.router.navigate(['/triplist']);
       },

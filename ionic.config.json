@@ -4,7 +4,7 @@
     "type": "ionic-angular",
     "proxies": [{
         "path": "/cargo",
-        "proxyUrl": "http://35.154.80.6:8080/cargo"
+        "proxyUrl": "35.154.80.6:8080/cargo"
     }],
     "integrations": {
         "cordova": {}

@@ -9,14 +9,27 @@ export class AuthService {
   windowHandle;
   ourcode;
   accesstoken;
+  remoteUrl = "http://35.154.80.6:8080";
   constructor(public http: HttpClient) { }
 
   setToken(data){
     this.accesstoken = "Bearer " +data.access_token;
   }
 
+  getRemoteUrl(){
+    return this.remoteUrl;
+  }
+
   getToken (){
     return this.accesstoken;
+  }
+
+  setUserId (userId){
+    this.userId = userId;
+  }
+
+  getUserId(){
+    return this.userId;
   }
 
   login(user) {

@@ -1,46 +1,31 @@
 <ion-header>
     <ion-navbar>
-        <button mat-button color="primary" >
+        <button mat-button color="primary">
         Back
         </button>
-      <!-- <ion-title end >
+        <!-- <ion-title end >
         Item List
       </ion-title> -->
-  
+
         <ion-buttons end>
-            <button mat-icon-button [matMenuTriggerFor]="menu">
-                <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu" >
-                <button mat-menu-item [routerLink]="['/']" >
-                <mat-icon>lock outline </mat-icon>
-                <span>LogOut</span>
-                </button>
-            </mat-menu>
+
         </ion-buttons>
     </ion-navbar>
-  
-  
+
+
     <ion-toolbar>
-      <ion-item center >
+        <ion-item center>
             <p>Company Name</p>
-      </ion-item>
+        </ion-item>
     </ion-toolbar>
-  </ion-header>
-  
-  <ion-content>
-    <ion-list>
-      <ion-item>
-          <h3 item-start>skque name</h3>
-        <ion-icon name="cart" item-end ></ion-icon>
-          <strong item-end>25kg</strong>
-      </ion-item>
+</ion-header>
+
+<ion-content>
+    <ion-list *ngFor="let skuItem of skuItems.list">
+        <ion-item>
+            <h3 item-start>{{skuItem.item_code}}</h3>
+            <ion-icon name="cart" item-end></ion-icon>
+            <strong item-end>{{skuItem.quantity}}</strong>
+        </ion-item>
     </ion-list>
-  </ion-content>
-<ion-content no-padding no-margin>
-  <mat-list-item >
-    <mat-icon mat-list-icon>folder</mat-icon>
-    <h4 mat-line>hai</h4>
-    <p mat-line> how are you angular </p>
-  </mat-list-item>
 </ion-content>

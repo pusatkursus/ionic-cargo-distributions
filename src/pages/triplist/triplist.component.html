@@ -26,7 +26,7 @@
 
     <ion-card class="card-design" *ngFor="let trip of tripList.message">
         <ion-list>
-            <ion-item no-lines style="cursor:pointer;" (click)="squeroot()">
+            <ion-item no-lines style="cursor:pointer;" (click)="squeroot(trip.pickupRequestId)">
                 <h3>{{trip.name}}</h3>
                 <p class="fontview"><span>{{trip.consigneeName}}</span> | <span>{{trip.consigneePhoneNo}}</span></p>
                 <p style="white-space: normal;">{{trip.locationAddress}} </p>

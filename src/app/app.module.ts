@@ -12,13 +12,15 @@ import {TransityInterceptor} from './transity.interceptor';
 import { AuthService } from './auth.service';
 import { LoginComponent } from '../pages/login/login.component';
 import { TriplistComponent } from '../pages/triplist/triplist.component';
+import { ItabsComponent } from '../pages/ionic/itabs/itabs.component';
+
 
 @NgModule({
   declarations: [
     MyApp,
     TriplistComponent,
     LoginComponent,
-   // ItabsComponent
+    ItabsComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +32,8 @@ import { TriplistComponent } from '../pages/triplist/triplist.component';
   entryComponents: [
     MyApp,
    LoginComponent,
-   TriplistComponent
+   TriplistComponent,
+   ItabsComponent
   ],
   providers: [
     StatusBar,
