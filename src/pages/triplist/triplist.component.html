@@ -1,15 +1,12 @@
 <ion-header>
     <ion-navbar>
-        <ion-title>Home</ion-title>
+        <ion-title >Home</ion-title>
         <ion-buttons end>
-            <button mat-icon-button>
+            <button  ion-button icon-only >
+                <ion-icon name="more"></ion-icon>
             </button>
-            <button mat-menu-item>
-              LogOut
-            </button>
-
-        </ion-buttons>
-
+          </ion-buttons>
+        
     </ion-navbar>
 
     <ion-toolbar>
@@ -23,6 +20,15 @@
 
 
 <ion-content class="padding-new">
+
+        <ion-fab right bottom >
+                <button ion-fab color="vibrant" mini><ion-icon name="play"></ion-icon></button>
+                <ion-fab-list>
+
+                </ion-fab-list>
+              </ion-fab>
+
+
     <div *ngIf="tripList.message;else elseBlock">
         <ion-card class="card-design" *ngFor="let trip of tripList.message">
             <ion-list>
@@ -31,6 +37,7 @@
                     <p class="fontview"><span>{{trip.consigneeName}}</span> | <span>{{trip.consigneePhoneNo}}</span></p>
                     <p style="white-space: normal;">{{trip.locationAddress}} </p>
                 </ion-item>
+
 
                 <ion-item no-margin>
                     <ion-label no-margin> {{trip.weightTonnage}} tons </ion-label>
@@ -47,7 +54,7 @@
             </ion-list>
         </ion-card>
     </div>
-    <ng-template #elseBlock>No data</ng-template>
+    <ng-template #elseBlock>No Active Trip</ng-template>
     <div>
         <div style="height: 100%; width: 100%" #map id="map_canvas"></div>
     </div>

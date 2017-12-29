@@ -1,3 +1,8 @@
+.login-header{
+    padding-top: 20px;
+    text-align: center;
+
+}
 .aleart {
     background-color: rgb(rgb(139, 110, 110), rgb(134, 235, 134), rgb(72, 72, 187));
     color: black;
@@ -7,3 +12,7 @@
    .list-md .item-input:last-child{
        border-bottom: none !important;
    }
+
+.list-md .item-input.ng-valid.item-input-has-value:not(.input-has-focus):not(.item-input-has-focus):last-child, .list-md .item-input.ng-valid.input-has-value:not(.input-has-focus):not(.item-input-has-focus):last-child{
+    border: none !important;
+}
