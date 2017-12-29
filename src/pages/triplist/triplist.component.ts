@@ -50,9 +50,9 @@ export class TriplistComponent implements OnInit {
     urlSearchParams.append('vehicleTripId', '119');
     urlSearchParams.append('loggedInUserId', '13');
 
-    this.http.get(this.auth.getRemoteUrl()+'/cargo/api/retrieve_vehicleTripDriverAssigned?driverId='+userId+'&loggedInUserId=13').subscribe((data) => {
+    this.http.get(this.auth.getRemoteUrl()+'/cargo/api/retrieve_vehicleTripDriverAssigned?driverId='+userId).subscribe((data) => {
    // data = {message:{vehicleTripId:197}}
-    this.http.get(this.auth.getRemoteUrl()+'/cargo/api/hub/retrieve_tripsheet?vehicleTripId='+data['message']['vehicleTripId']+'&loggedInUserId=13').subscribe((data) => {
+    this.http.get(this.auth.getRemoteUrl()+'/cargo/api/hub/retrieve_tripsheet?vehicleTripId='+data['message']+'&loggedInUserId='+userId).subscribe((data) => {
       console.log(data);
       this.tripList = data;
      } 

@@ -1,15 +1,12 @@
 <ion-header>
     <ion-navbar>
-        <ion-title>Home</ion-title>
+        <ion-title >Home</ion-title>
         <ion-buttons end>
-            <button mat-icon-button>
+            <button  ion-button icon-only >
+                <ion-icon name="more"></ion-icon>
             </button>
-            <button mat-menu-item>
-              LogOut
-            </button>
-
-        </ion-buttons>
-
+          </ion-buttons>
+        
     </ion-navbar>
 
     <ion-toolbar>
@@ -23,30 +20,39 @@
 
 
 <ion-content class="padding-new">
+        <ion-fab right bottom >
+                <button ion-fab color="vibrant" mini><ion-icon name="play"></ion-icon></button>
+                <ion-fab-list>
 
-    <ion-card class="card-design" *ngFor="let trip of tripList.message">
-        <ion-list>
-            <ion-item no-lines style="cursor:pointer;" (click)="squeroot(trip.pickupRequestId)">
-                <h3>{{trip.name}}</h3>
-                <p class="fontview"><span>{{trip.consigneeName}}</span> | <span>{{trip.consigneePhoneNo}}</span></p>
-                <p style="white-space: normal;">{{trip.locationAddress}} </p>
-            </ion-item>
+                </ion-fab-list>
+              </ion-fab>
 
-            <ion-item no-margin>
-                <ion-label no-margin> {{trip.weightTonnage}} tons </ion-label>
-                <ion-label no-margin> </ion-label>
-                <ion-list no-lines item-right>
-                    <button ion-button color="danger" clear icon-only>
+
+    <div *ngIf="tripList.message;else elseBlock">
+        <ion-card class="card-design" *ngFor="let trip of tripList.message">
+            <ion-list>
+                <ion-item no-lines style="cursor:pointer;" (click)="squeroot(trip.pickupRequestId)">
+                    <h3>{{trip.name}}</h3>
+                    <p class="fontview"><span>{{trip.consigneeName}}</span> | <span>{{trip.consigneePhoneNo}}</span></p>
+                    <p style="white-space: normal;">{{trip.locationAddress}} </p>
+                </ion-item>
+
+                <ion-item no-margin>
+                    <ion-label no-margin> {{trip.weightTonnage}} tons </ion-label>
+                    <ion-label no-margin> </ion-label>
+                    <ion-list no-lines item-right>
+                        <button ion-button color="danger" clear icon-only>
                     <ion-icon name='close-circle' style="color:red;" ></ion-icon>
                </button>
-                    <button ion-button color="danger" clear icon-only>
+                        <button ion-button color="danger" clear icon-only>
                   <ion-icon name='checkmark-circle' style="color:green" ></ion-icon>
               </button>
-                </ion-list>
-            </ion-item>
-        </ion-list>
-    </ion-card>
-
+                    </ion-list>
+                </ion-item>
+            </ion-list>
+        </ion-card>
+    </div>
+    <ng-template #elseBlock>No Active Trip</ng-template>
     <div>
         <div style="height: 100%; width: 100%" #map id="map_canvas"></div>
     </div>
