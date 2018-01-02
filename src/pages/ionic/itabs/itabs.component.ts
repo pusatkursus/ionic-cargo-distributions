@@ -27,17 +27,7 @@ export class ItabsComponent implements OnInit {
      
     )
 /*
-    this.http.get('http://localhost:8080/cargo/api/hub/update_vehicleTrip?vehicleTripId=197&status=2&loggedInUserId=18').subscribe((data) => {
-      console.log(data);
-
-    this.http.get('http://localhost:8080/cargo/api/hub/update_vehicleTrip?vehicleTripId=197&status=3&loggedInUserId=18').subscribe((data) => {
-      console.log(data);
-     // this.tripList = data;
-     }
-     
-    )
-    }
-    )
+    
   */ }
 
 }

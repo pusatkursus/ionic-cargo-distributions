@@ -9,7 +9,7 @@ export class AuthService {
   windowHandle;
   ourcode;
   accesstoken;
-  remoteUrl = "http://35.154.80.6:8080";
+  remoteUrl = "http://localhost:8080";
   constructor(public http: HttpClient) { }
 
   setToken(data){
