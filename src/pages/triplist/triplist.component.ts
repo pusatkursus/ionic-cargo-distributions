@@ -96,7 +96,6 @@ export class TriplistComponent implements OnInit {
 
   pod(pickupRequestVehicleTripId) {
     let userId = this.auth.getUserId();
-
  //  let formData: FormData = new FormData(); 
 
  /*   let urlSearchParams = new URLSearchParams();
@@ -139,13 +138,13 @@ export class TriplistComponent implements OnInit {
     let urlSearchParams = new URLSearchParams();
     urlSearchParams.append('vehicleTripId', '119');
     urlSearchParams.append('loggedInUserId', '13');
-    var data = { message: 197 };
+   /* var data = { message: 197 };
     this.vehicleTripId = data['message'];
     this.http.get(this.auth.getRemoteUrl() + '/cargo/api/hub/retrieve_tripsheet?vehicleTripId=' + data['message'] + '&loggedInUserId=' + userId).subscribe((data) => {
       console.log(data);
       this.tripList = data;
     }
-    )
+    )*/
     this.http.get(this.auth.getRemoteUrl() + '/cargo/api/retrieve_vehicleTripDriverAssigned?driverId=' + userId).subscribe((data) => {
       this.vehicleTripId = data['message'];
       this.http.get(this.auth.getRemoteUrl() + '/cargo/api/hub/retrieve_tripsheet?vehicleTripId=' + data['message'] + '&loggedInUserId=' + userId).subscribe((data) => {
