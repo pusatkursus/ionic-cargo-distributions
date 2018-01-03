@@ -75,8 +75,8 @@ export class TriplistComponent implements OnInit {
     let str ={
       pickupRequestVehicleTripId: pickupRequestVehicleTripId,
         loggedInUserId: userId,
-        attemptedDate: new Date().toLocaleDateString("EN"),
-        attemptedTime: new Date().getTime(),
+        attemptedDate: new Date().toISOString().split("T")[0].split("-").join('/'),
+        attemptedTime: new Date().toTimeString().split(":").splice(0,2).join(":"),
         remarks: '',
         unsuccessfullType : 2
       }
@@ -112,11 +112,11 @@ export class TriplistComponent implements OnInit {
   */  let str =
       {
         proofOfDeliveryInput: JSON.stringify({
-          pickup_request_vehicle_trip_assignment: pickupRequestVehicleTripId,
+          pickup_request_vehicle_trip_id: pickupRequestVehicleTripId,
           delivered_to_person: 'xyz',
           user_id: userId,
-          delivered_date: new Date().toLocaleDateString("EN"),
-          delivered_time: new Date().getTime(),
+          delivered_date: new Date().toISOString().split("T")[0].split("-").join('/'),
+          delivered_time: new Date().toTimeString().split(":").splice(0,2).join(":"),
           comment: ''
         })
       }
