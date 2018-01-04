@@ -13,14 +13,15 @@ import { AuthService } from './auth.service';
 import { LoginComponent } from '../pages/login/login.component';
 import { TriplistComponent } from '../pages/triplist/triplist.component';
 import { ItabsComponent } from '../pages/ionic/itabs/itabs.component';
-
+import { LogoutComponent } from '../pages/logout/logout.component'
 
 @NgModule({
   declarations: [
     MyApp,
     TriplistComponent,
     LoginComponent,
-    ItabsComponent
+    ItabsComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +34,9 @@ import { ItabsComponent } from '../pages/ionic/itabs/itabs.component';
     MyApp,
    LoginComponent,
    TriplistComponent,
-   ItabsComponent
+   ItabsComponent,
+   LogoutComponent
+
   ],
   providers: [
     StatusBar,

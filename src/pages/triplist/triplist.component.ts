@@ -6,7 +6,8 @@ import { AuthService } from '../../app/auth.service';
 import { Observable } from 'rxjs/Observable';
 import { NavController } from 'ionic-angular';
 import { ItabsComponent } from '../ionic/itabs/itabs.component';
-
+import { PopoverController } from 'ionic-angular';
+import {LogoutComponent} from '../logout/logout.component';
 
 declare var google: any;
 @Component({
@@ -19,7 +20,6 @@ export class TriplistComponent implements OnInit {
 
 
   private componentToDisplay: number = 1;  // this is used for display google map and triplist flag
-
   @ViewChild('map') mapRef: ElementRef;
 
   tripName: string = "hello";
@@ -27,7 +27,7 @@ export class TriplistComponent implements OnInit {
   vehicleTripId;
   hasTripStarted = false;
 
-  constructor(private http: HttpClient, private auth: AuthService, public navCtrl: NavController) { }
+  constructor(private http: HttpClient, private auth: AuthService, public navCtrl: NavController,public popoverCtrl: PopoverController) { }
 
   ngOnInit(): void {
     this.getData();
@@ -35,10 +35,12 @@ export class TriplistComponent implements OnInit {
   }
 
   // this is used for display triplist and google map dependupon the flag  number = 1;
-
   setComponent(componentNumber: number): void {
     this.componentToDisplay = componentNumber;
   }
+
+
+
 
   // this function used for navigate another page like sque page
   squeroot(pickupRequestId) {
@@ -97,7 +99,6 @@ export class TriplistComponent implements OnInit {
   pod(pickupRequestVehicleTripId) {
     let userId = this.auth.getUserId();
  //  let formData: FormData = new FormData(); 
-
  /*   let urlSearchParams = new URLSearchParams();
     urlSearchParams.append('pickup_request_vehicle_trip_assignment', pickupRequestVehicleTripId);
     urlSearchParams.append('delivered_to_person', '');
@@ -105,7 +106,6 @@ export class TriplistComponent implements OnInit {
     urlSearchParams.append('delivered_date', new Date().toLocaleDateString("EN"));
     urlSearchParams.append('delivered_time', ""+new Date().getTime());
     urlSearchParams.append('comment', '');
-
     let proofOfDeliveryInput = new URLSearchParams();
     proofOfDeliveryInput.append('proofOfDeliveryInput',urlSearchParams.toString());
   */  let str =
@@ -155,6 +155,13 @@ export class TriplistComponent implements OnInit {
     }
 
     )
+  }
+
+  presentPopover(myEvent) {
+    let popover = this.popoverCtrl.create(LogoutComponent);
+    popover.present({
+      ev: myEvent
+    });
   }
 
   DisplayMap() {
