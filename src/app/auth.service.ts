@@ -9,7 +9,7 @@ export class AuthService {
   windowHandle;
   ourcode;
   accesstoken;
-  remoteUrl = "http://localhost:8080";
+  remoteUrl = "http://35.154.80.6:8080";
   constructor(public http: HttpClient) { }
 
   setToken(data){
@@ -32,20 +32,5 @@ export class AuthService {
     return this.userId;
   }
 
-  login(user) {
-
-    let urlSearchParams = new URLSearchParams();
-    urlSearchParams.append('username', user.username);
-    urlSearchParams.append('password', user.password);
-    urlSearchParams.append('grant_type', 'password');
-    urlSearchParams.append('client_id', 'my-trusted-client');
-
-    return new Promise((resolve) => {
-      this.http.post('http://35.154.80.6:8080/cargo/oauth/token',
-        urlSearchParams.toString()).subscribe((data) => {
-        }
-        )
-    })
-  }
  
 }

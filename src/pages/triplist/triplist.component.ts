@@ -6,7 +6,8 @@ import { AuthService } from '../../app/auth.service';
 import { Observable } from 'rxjs/Observable';
 import { NavController } from 'ionic-angular';
 import { ItabsComponent } from '../ionic/itabs/itabs.component';
-
+import { PopoverController } from 'ionic-angular';
+import {LogoutComponent} from '../logout/logout.component';
 
 declare var google: any;
 @Component({
@@ -19,7 +20,6 @@ export class TriplistComponent implements OnInit {
 
 
   private componentToDisplay: number = 1;  // this is used for display google map and triplist flag
-
   @ViewChild('map') mapRef: ElementRef;
 
   tripName: string = "hello";
@@ -27,7 +27,7 @@ export class TriplistComponent implements OnInit {
   vehicleTripId;
   hasTripStarted = false;
 
-  constructor(private http: HttpClient, private auth: AuthService, public navCtrl: NavController) { }
+  constructor(private http: HttpClient, private auth: AuthService, public navCtrl: NavController,public popoverCtrl: PopoverController) { }
 
   ngOnInit(): void {
     this.getData();
@@ -35,10 +35,12 @@ export class TriplistComponent implements OnInit {
   }
 
   // this is used for display triplist and google map dependupon the flag  number = 1;
-
   setComponent(componentNumber: number): void {
     this.componentToDisplay = componentNumber;
   }
+
+
+
 
   // this function used for navigate another page like sque page
   squeroot(pickupRequestId) {
@@ -75,8 +77,8 @@ export class TriplistComponent implements OnInit {
     let str ={
       pickupRequestVehicleTripId: pickupRequestVehicleTripId,
         loggedInUserId: userId,
-        attemptedDate: new Date().toLocaleDateString("EN"),
-        attemptedTime: new Date().getTime(),
+        attemptedDate: new Date().toISOString().split("T")[0].split("-").join('/'),
+        attemptedTime: new Date().toTimeString().split(":").splice(0,2).join(":"),
         remarks: '',
         unsuccessfullType : 2
       }
@@ -96,9 +98,7 @@ export class TriplistComponent implements OnInit {
 
   pod(pickupRequestVehicleTripId) {
     let userId = this.auth.getUserId();
-
  //  let formData: FormData = new FormData(); 
-
  /*   let urlSearchParams = new URLSearchParams();
     urlSearchParams.append('pickup_request_vehicle_trip_assignment', pickupRequestVehicleTripId);
     urlSearchParams.append('delivered_to_person', '');
@@ -106,17 +106,16 @@ export class TriplistComponent implements OnInit {
     urlSearchParams.append('delivered_date', new Date().toLocaleDateString("EN"));
     urlSearchParams.append('delivered_time', ""+new Date().getTime());
     urlSearchParams.append('comment', '');
-
     let proofOfDeliveryInput = new URLSearchParams();
     proofOfDeliveryInput.append('proofOfDeliveryInput',urlSearchParams.toString());
   */  let str =
       {
         proofOfDeliveryInput: JSON.stringify({
-          pickup_request_vehicle_trip_assignment: pickupRequestVehicleTripId,
+          pickup_request_vehicle_trip_id: pickupRequestVehicleTripId,
           delivered_to_person: 'xyz',
           user_id: userId,
-          delivered_date: new Date().toLocaleDateString("EN"),
-          delivered_time: new Date().getTime(),
+          delivered_date: new Date().toISOString().split("T")[0].split("-").join('/'),
+          delivered_time: new Date().toTimeString().split(":").splice(0,2).join(":"),
           comment: ''
         })
       }
@@ -139,13 +138,13 @@ export class TriplistComponent implements OnInit {
     let urlSearchParams = new URLSearchParams();
     urlSearchParams.append('vehicleTripId', '119');
     urlSearchParams.append('loggedInUserId', '13');
-    var data = { message: 197 };
+   /* var data = { message: 197 };
     this.vehicleTripId = data['message'];
     this.http.get(this.auth.getRemoteUrl() + '/cargo/api/hub/retrieve_tripsheet?vehicleTripId=' + data['message'] + '&loggedInUserId=' + userId).subscribe((data) => {
       console.log(data);
       this.tripList = data;
     }
-    )
+    )*/
     this.http.get(this.auth.getRemoteUrl() + '/cargo/api/retrieve_vehicleTripDriverAssigned?driverId=' + userId).subscribe((data) => {
       this.vehicleTripId = data['message'];
       this.http.get(this.auth.getRemoteUrl() + '/cargo/api/hub/retrieve_tripsheet?vehicleTripId=' + data['message'] + '&loggedInUserId=' + userId).subscribe((data) => {
@@ -156,6 +155,13 @@ export class TriplistComponent implements OnInit {
     }
 
     )
+  }
+
+  presentPopover(myEvent) {
+    let popover = this.popoverCtrl.create(LogoutComponent);
+    popover.present({
+      ev: myEvent
+    });
   }
 
   DisplayMap() {

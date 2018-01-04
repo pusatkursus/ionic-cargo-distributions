@@ -9,10 +9,16 @@
     padding-top: 10px;
    }
    
-   .list-md .item-input:last-child{
-       border-bottom: none !important;
+
+   .list-md .item-input:last-child {
+
+    border-bottom: 1px solid #882a2a !important;
    }
 
+   .list-md .item-input:last-child {
+
+    border-bottom: 1px solid transparent !important;
+   }
 .list-md .item-input.ng-valid.item-input-has-value:not(.input-has-focus):not(.item-input-has-focus):last-child, .list-md .item-input.ng-valid.input-has-value:not(.input-has-focus):not(.item-input-has-focus):last-child{
     border: none !important;
 }
