@@ -16,6 +16,10 @@ export class AuthService {
     this.accesstoken = "Bearer " +data.access_token;
   }
 
+  removeToken(){
+    this.accesstoken = null;
+  }
+
   getRemoteUrl(){
     return this.remoteUrl;
   }

@@ -19,7 +19,7 @@ export class LogoutComponent implements OnInit {
 
   close() {
     
-       this.auth.setToken({access_token:null})
+       this.auth.removeToken();
        this.navCtrl.push(LoginComponent);
     // this.viewCtrl.dismiss();
 
