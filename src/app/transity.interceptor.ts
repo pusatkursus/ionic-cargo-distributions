@@ -19,7 +19,7 @@ export class TransityInterceptor implements HttpInterceptor {
         headers: req.headers.set('Authorization','Basic '+basicheader)
         .set('Content-Type', 'application/x-www-form-urlencoded')
     });
-    }
+   }
     else {
        authReq = req.clone({
         headers: req.headers.set('Authorization',this.auth.getToken())

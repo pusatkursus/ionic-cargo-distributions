@@ -20,7 +20,7 @@ export class ItabsComponent implements OnInit {
 
   ngOnInit() {
 
-    this.http.get(this.auth.getRemoteUrl()+'/cargo/api/retrieve_pickupRequestSkuItems?pickupRequestId='+this.pickupRequestId+'&loggedInUserId=18').subscribe((data) => {
+    this.http.get(this.auth.getRemoteUrl()+'/cargo/api/retrieve_pickupRequestSkuItems?pickupRequestId='+this.pickupRequestId+'&loggedInUserId=18',{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
     this.skuItems['list'] = data["message"]["sku_items"];
 
      }

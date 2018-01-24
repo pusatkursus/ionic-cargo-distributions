@@ -20,6 +20,22 @@ export class AuthService {
     this.accesstoken = null;
   }
 
+  getLoginHeaders(){
+    let header = new HttpHeaders();
+    let client_id = "my-trusted-client";
+    let client_secret = 'secret';
+    var basicheader = btoa(client_id + ':' + client_secret);
+    header.append('Authorization','Basic '+basicheader);
+    return header;
+  }
+
+  getRequestHeaders(){
+    let header = new HttpHeaders();
+    header.append('Content-Type','application/x-www-form-urlencoded');
+    header.append('Authorization',this.getToken());
+    return header;
+  }
+
   getRemoteUrl(){
     return this.remoteUrl;
   }

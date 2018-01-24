@@ -49,7 +49,7 @@ export class TriplistComponent implements OnInit {
   startTrip() {
     let userId = this.auth.getUserId();
 
-    this.http.get(this.auth.getRemoteUrl() + '/cargo/api/hub/update_vehicleTrip?vehicleTripId=' + this.vehicleTripId + '&status=' + (this.hasTripStarted ? 3 : 2) + '&loggedInUserId=' + userId).subscribe((data) => {
+    this.http.get(this.auth.getRemoteUrl() + '/cargo/api/hub/update_vehicleTrip?vehicleTripId=' + this.vehicleTripId + '&status=' + (this.hasTripStarted ? 3 : 2) + '&loggedInUserId=' + userId,{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
       console.log(data);
       this.hasTripStarted = !this.hasTripStarted;
       if (this.hasTripStarted) {
@@ -82,7 +82,7 @@ export class TriplistComponent implements OnInit {
         remarks: '',
         unsuccessfullType : 2
       }
-      this.http.post(this.auth.getRemoteUrl() + '/cargo/api/hub/unsuccessfull_consignments', JSON.stringify(str)).subscribe((data) => {
+      this.http.post(this.auth.getRemoteUrl() + '/cargo/api/hub/unsuccessfull_consignments', JSON.stringify(str),{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
     console.log(data);
     this.hasTripStarted = !this.hasTripStarted;
     if (this.hasTripStarted) {
@@ -119,7 +119,7 @@ export class TriplistComponent implements OnInit {
           comment: ''
         })
       }
-    this.http.post(this.auth.getRemoteUrl() + '/cargo/api/create_proofOfDelivery', this.getFormUrlEncoded(str)).subscribe((data) => {
+    this.http.post(this.auth.getRemoteUrl() + '/cargo/api/create_proofOfDelivery', this.getFormUrlEncoded(str),{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
       console.log(data);
       this.hasTripStarted = !this.hasTripStarted;
       if (this.hasTripStarted) {
@@ -145,9 +145,9 @@ export class TriplistComponent implements OnInit {
       this.tripList = data;
     }
     )*/
-    this.http.get(this.auth.getRemoteUrl() + '/cargo/api/retrieve_vehicleTripDriverAssigned?driverId=' + userId).subscribe((data) => {
+    this.http.get(this.auth.getRemoteUrl() + '/cargo/api/retrieve_vehicleTripDriverAssigned?driverId=' + userId,{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
       this.vehicleTripId = data['message'];
-      this.http.get(this.auth.getRemoteUrl() + '/cargo/api/hub/retrieve_tripsheet?vehicleTripId=' + data['message'] + '&loggedInUserId=' + userId).subscribe((data) => {
+      this.http.get(this.auth.getRemoteUrl() + '/cargo/api/hub/retrieve_tripsheet?vehicleTripId=' + data['message'] + '&loggedInUserId=' + userId,{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
         console.log(data);
         this.tripList = data;
       }
