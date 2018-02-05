@@ -1,35 +1,33 @@
-
 <ion-header>
-    <ion-navbar>
-      <ion-title>
-         ITEM LIST
-      </ion-title>
-      <ion-buttons end>
-        <button ion-button icon-only >
+  <ion-navbar>
+    <ion-title>
+      ITEM LIST
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only>
           <ion-icon name="contact"></ion-icon>
         </button>
-      </ion-buttons>
-    </ion-navbar>
-  
-  
-    <ion-toolbar>
-      <ion-item center >
-            <p>Company Name</p>
+    </ion-buttons>
+  </ion-navbar>
+
+
+  <ion-toolbar>
+    <ion-item center>
+      <p>{{consignee}}</p>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list *ngFor="let skuItem of skuItems.list">
+    <ion-card>
+      <ion-item>
+        <h3 item-start>{{skuItem.item_code}}</h3>
+        <div>{{skuItem.itemDescription}}</div>
+        <strong item-end>{{skuItem.quantity}}</strong>
       </ion-item>
-    </ion-toolbar>
-  </ion-header>
-  
-  <ion-content>
-    
-        <ion-list *ngFor="let skuItem of skuItems.list">
-                <ion-card>
-                <ion-item>
-                    <h3 item-start>{{skuItem.item_code}}</h3>
-                    <ion-icon name="cart" item-end></ion-icon>
-                    <strong item-end>{{skuItem.quantity}}</strong>
-                </ion-item>
-        </ion-card>
-        </ion-list>
-  
-  </ion-content>
-  
+    </ion-card>
+  </ion-list>
+
+</ion-content>

@@ -1,9 +1,7 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../../app/auth.service';
-import { Observable } from 'rxjs/Observable';
 import { NavController } from 'ionic-angular';
 import { ItabsComponent } from '../ionic/itabs/itabs.component';
 import { PopoverController } from 'ionic-angular';
@@ -26,6 +24,10 @@ export class TriplistComponent implements OnInit {
   tripList = {};
   vehicleTripId;
   hasTripStarted = false;
+  vehicleNo;
+  model;
+  consignee;
+  vehicleTripStatus;
 
   constructor(private http: HttpClient, private auth: AuthService, public navCtrl: NavController,public popoverCtrl: PopoverController) { }
 
@@ -43,8 +45,8 @@ export class TriplistComponent implements OnInit {
 
 
   // this function used for navigate another page like sque page
-  squeroot(pickupRequestId) {
-    this.navCtrl.push(ItabsComponent, { pickupRequestId: pickupRequestId });
+  squeroot(pickupRequestId,consignee) {
+    this.navCtrl.push(ItabsComponent, { pickupRequestId: pickupRequestId , consignee : consignee});
   }
   startTrip() {
     let userId = this.auth.getUserId();
@@ -86,10 +88,10 @@ export class TriplistComponent implements OnInit {
     console.log(data);
     this.hasTripStarted = !this.hasTripStarted;
     if (this.hasTripStarted) {
-      alert("Proof of Delivery Created!");
+      alert("Consignment has been marked as unsuccessfull!");
     }
     else {
-      alert("Error in creating Proof of Delivery");
+      alert("Error in marking the consignment as unsuccessfull!");
     }
   }
   )
@@ -146,8 +148,11 @@ export class TriplistComponent implements OnInit {
     }
     )*/
     this.http.get(this.auth.getRemoteUrl() + '/cargo/api/retrieve_vehicleTripDriverAssigned?driverId=' + userId,{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
-      this.vehicleTripId = data['message'];
-      this.http.get(this.auth.getRemoteUrl() + '/cargo/api/hub/retrieve_tripsheet?vehicleTripId=' + data['message'] + '&loggedInUserId=' + userId,{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
+      this.vehicleTripId = data['message'].vehicleTripId;
+      this.vehicleNo = data['message'].vehicleNo;
+      this.model = data['message'].vehicleModelName;
+      this.vehicleTripStatus = data['message'].vehicleTripStatus;
+      this.http.get(this.auth.getRemoteUrl() + '/cargo/api/hub/retrieve_tripsheet?vehicleTripId=' + this.vehicleTripId + '&loggedInUserId=' + userId,{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
         console.log(data);
         this.tripList = data;
       }

@@ -1,77 +1,79 @@
 <ion-header>
-    <ion-navbar>
-        <ion-title>Home</ion-title>
-        <ion-buttons end>
-            <button ion-button icon-only (click)="presentPopover($event)">
+  <ion-navbar>
+    <ion-title>Trip List</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="presentPopover($event)">
                 <ion-icon name="more"></ion-icon>
             </button>
-        </ion-buttons>
+    </ion-buttons>
 
-    </ion-navbar>
+  </ion-navbar>
 
-    <ion-toolbar>
-        <ion-item>
-            <p item-start>smalltruck</p>
-            <p item-end>ka51c4750 </p>
-        </ion-item>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-item>
+      <p item-start>{{model}}</p>
+      <p item-end>{{vehicleNo}} </p>
+    </ion-item>
+  </ion-toolbar>
 
 </ion-header>
 
 
 <ion-content class="padding-new">
 
-    <ion-fab right bottom>
-        <button ion-fab color="vibrant" mini (click)="startTrip()"><ion-icon name="play"></ion-icon></button>
-        <ion-fab-list>
+  <ion-fab right bottom>
+    <button ion-fab color="vibrant" mini (click)="startTrip()"><ion-icon name="play"></ion-icon></button>
+    <ion-fab-list>
 
-        </ion-fab-list>
-    </ion-fab>
-
-
-    <div *ngIf="tripList.message;else elseBlock">
-        <ion-card class="card-design" *ngFor="let trip of tripList.message">
-            <ion-list>
-                <ion-item no-lines style="cursor:pointer;" (click)="squeroot(trip.pickupRequestId)">
-                    <h3>{{trip.name}}</h3>
-                    <p class="fontview"><span>{{trip.consigneeName}}</span> | <span>{{trip.consigneePhoneNo}}</span></p>
-                    <p style="white-space: normal;">{{trip.locationAddress}} </p>
-                </ion-item>
+    </ion-fab-list>
+  </ion-fab>
 
 
-                <ion-item no-margin>
-                    <ion-label no-margin> {{trip.weightTonnage}} tons </ion-label>
-                    <ion-label no-margin> </ion-label>
-                    <ion-list no-lines item-right>
-                        <button ion-button color="danger" clear (click)="unsuccessful(trip.pickupRequestVehicleTripId)" icon-only>
+  <div *ngIf="tripList.message;else elseBlock">
+    <ion-card class="card-design" *ngFor="let trip of tripList.message">
+      <ion-list>
+        <ion-item no-lines style="cursor:pointer;" (click)="squeroot(trip.pickupRequestId,trip.consigneeName)">
+          <h3>{{trip.name}}</h3>
+          <p class="fontview"><span>{{trip.consigneeName}}</span> | <span>{{trip.consigneePhoneNo}}</span></p>
+          <p style="white-space: normal;">{{trip.locationAddress}} </p>
+        </ion-item>
+
+
+        <ion-item no-margin>
+          <ion-label no-margin> {{trip.weightTonnage}} tons </ion-label>
+          <ion-label no-margin> </ion-label>
+          <ion-list no-lines item-right>
+            <div *ngIf="vehicleTripStatus == 2">
+              <button *ngIf="trip.status == 1" ion-button color="danger" clear (click)="unsuccessful(trip.pickupRequestVehicleTripId)" icon-only>
                     <ion-icon name='close-circle' style="color:red;" ></ion-icon>
                </button>
-                        <button ion-button color="danger" clear (click)="pod(trip.pickupRequestVehicleTripId)" icon-only>
+              <button *ngIf="trip.status == 2" ion-button color="danger" clear (click)="pod(trip.pickupRequestVehicleTripId)" icon-only>
                   <ion-icon name='checkmark-circle' style="color:green" ></ion-icon>
               </button>
-                    </ion-list>
-                </ion-item>
-            </ion-list>
-        </ion-card>
-    </div>
-    <ng-template #elseBlock>No Active Trip</ng-template>
-    <div>
-        <div style="height: 100%; width: 100%" #map id="map_canvas"></div>
-    </div>
+            </div>
+          </ion-list>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+  </div>
+  <ng-template #elseBlock>No Active Trip</ng-template>
+  <div>
+    <div style="height: 100%; width: 100%" #map id="map_canvas"></div>
+  </div>
 
 </ion-content>
 
 
 <ion-footer class="footer-ion">
 
-    <ion-segment>
-        <ion-segment-button (click)="setComponent(1)" class="segment-new" value="all">
-            <ion-icon class="icon-color" name="menu"></ion-icon>
-        </ion-segment-button>
-        <ion-segment-button (click)="setComponent(2)" class="segment-new" value="favorites">
-            <ion-icon class="icon-color" name="pin"></ion-icon>
-        </ion-segment-button>
-    </ion-segment>
+  <ion-segment>
+    <ion-segment-button (click)="setComponent(1)" class="segment-new" value="all">
+      <ion-icon class="icon-color" name="menu"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button (click)="setComponent(2)" class="segment-new" value="favorites">
+      <ion-icon class="icon-color" name="pin"></ion-icon>
+    </ion-segment-button>
+  </ion-segment>
 
 
 </ion-footer>
