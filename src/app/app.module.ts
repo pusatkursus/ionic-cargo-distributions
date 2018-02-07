@@ -14,6 +14,13 @@ import { LoginComponent } from '../pages/login/login.component';
 import { TriplistComponent } from '../pages/triplist/triplist.component';
 import { ItabsComponent } from '../pages/ionic/itabs/itabs.component';
 import { LogoutComponent } from '../pages/logout/logout.component'
+import { MapComponent } from '../pages/map/map.component';
+import { Geolocation } from '@ionic-native/geolocation';
+import { SignaturePadModule } from 'angular2-signaturepad';
+import { SignatureComponent } from '../pages/signature/signature.component'
+import {Camera} from '@ionic-native/camera';
+import { File } from '@ionic-native/file';
+import { NativeStorage } from '@ionic-native/native-storage';
 
 @NgModule({
   declarations: [
@@ -21,10 +28,13 @@ import { LogoutComponent } from '../pages/logout/logout.component'
     TriplistComponent,
     LoginComponent,
     ItabsComponent,
-    LogoutComponent
+    LogoutComponent,
+    MapComponent,
+    SignatureComponent
   ],
   imports: [
     BrowserModule,
+    SignaturePadModule,
     IonicModule.forRoot(MyApp),
     HttpClientModule,
     FormsModule
@@ -35,12 +45,18 @@ import { LogoutComponent } from '../pages/logout/logout.component'
    LoginComponent,
    TriplistComponent,
    ItabsComponent,
-   LogoutComponent
+   LogoutComponent,
+   MapComponent,
+   SignatureComponent
 
   ],
   providers: [
     StatusBar,
     SplashScreen,
+    Geolocation,
+    File,
+    NativeStorage,
+    Camera,
     {provide: ErrorHandler, useClass: IonicErrorHandler},{
       provide : HTTP_INTERCEPTORS,
       useClass : TransityInterceptor,

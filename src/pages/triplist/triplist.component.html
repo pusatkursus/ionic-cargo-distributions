@@ -20,7 +20,8 @@
 
 
 <ion-content class="padding-new">
-
+  <div [hidden]="ismenu">
+    
   <ion-fab right bottom>
     <button ion-fab color="vibrant" mini (click)="startTrip()"><ion-icon name="play"></ion-icon></button>
     <ion-fab-list>
@@ -56,10 +57,13 @@
       </ion-list>
     </ion-card>
   </div>
+
   <ng-template #elseBlock>No Active Trip</ng-template>
-  <div>
-    <div style="height: 100%; width: 100%" #map id="map_canvas"></div>
-  </div>
+</div>
+
+  <div [hidden]="ismap">
+    <div  #contentPlaceholder id="map_canvas" style="height: 400px; width:100%; "></div>
+</div>
 
 </ion-content>
 
@@ -67,13 +71,14 @@
 <ion-footer class="footer-ion">
 
   <ion-segment>
-    <ion-segment-button (click)="setComponent(1)" class="segment-new" value="all">
-      <ion-icon class="icon-color" name="menu"></ion-icon>
-    </ion-segment-button>
-    <ion-segment-button (click)="setComponent(2)" class="segment-new" value="favorites">
-      <ion-icon class="icon-color" name="pin"></ion-icon>
-    </ion-segment-button>
-  </ion-segment>
+        <ion-segment-button (click)="menuclick()" class="segment-new" value="all">
+            <ion-icon class="icon-color" name="menu"></ion-icon>
+        </ion-segment-button>
+        <ion-segment-button (click)="DisplayMap()" class="segment-new" value="favorites">
+            <ion-icon class="icon-color" name="pin"></ion-icon>
+        </ion-segment-button>
+    </ion-segment>
+
 
 
 </ion-footer>
