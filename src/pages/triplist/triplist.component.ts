@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit,AfterViewInit } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../app/auth.service';
@@ -6,8 +6,12 @@ import { NavController } from 'ionic-angular';
 import { ItabsComponent } from '../ionic/itabs/itabs.component';
 import { PopoverController } from 'ionic-angular';
 import {LogoutComponent} from '../logout/logout.component';
+import { Geolocation } from '@ionic-native/geolocation';
+import { MapComponent } from '../map/map.component';
+import { NativeStorage } from '@ionic-native/native-storage';
 
 declare var google: any;
+
 @Component({
   selector: 'app-triplist',
   templateUrl: './triplist.component.html',
@@ -17,30 +21,38 @@ declare var google: any;
 export class TriplistComponent implements OnInit {
 
 
-  private componentToDisplay: number = 1;  // this is used for display google map and triplist flag
-  @ViewChild('map') mapRef: ElementRef;
+  private contentPlaceholder: ElementRef;
+
+  @ViewChild('contentPlaceholder') set content(content: ElementRef) {
+     this.contentPlaceholder = content;
+  }
 
   tripName: string = "hello";
   tripList = {};
   vehicleTripId;
+  googllatlong : any = [] ;
   hasTripStarted = false;
   vehicleNo;
   model;
   consignee;
   vehicleTripStatus;
-
-  constructor(private http: HttpClient, private auth: AuthService, public navCtrl: NavController,public popoverCtrl: PopoverController) { }
+  ismenu = false; 
+  ismap = true;
+  map : any ;
+  constructor(private http: HttpClient, private auth: AuthService, public navCtrl: NavController,public popoverCtrl: PopoverController,public geolocation: Geolocation,
+    private nativeStorage: NativeStorage,) { }
 
   ngOnInit(): void {
     this.getData();
-    // this.DisplayMap();  
   }
+  ngAfterViewInit(){
+    console.log(this.contentPlaceholder);
+    }
 
-  // this is used for display triplist and google map dependupon the flag  number = 1;
-  setComponent(componentNumber: number): void {
-    this.componentToDisplay = componentNumber;
+  menuclick(){
+    this.ismenu = false;
+    this.ismap = true;
   }
-
 
 
 
@@ -97,43 +109,6 @@ export class TriplistComponent implements OnInit {
   )
   }
 
-
-  pod(pickupRequestVehicleTripId) {
-    let userId = this.auth.getUserId();
- //  let formData: FormData = new FormData(); 
- /*   let urlSearchParams = new URLSearchParams();
-    urlSearchParams.append('pickup_request_vehicle_trip_assignment', pickupRequestVehicleTripId);
-    urlSearchParams.append('delivered_to_person', '');
-    urlSearchParams.append('user_id', userId);
-    urlSearchParams.append('delivered_date', new Date().toLocaleDateString("EN"));
-    urlSearchParams.append('delivered_time', ""+new Date().getTime());
-    urlSearchParams.append('comment', '');
-    let proofOfDeliveryInput = new URLSearchParams();
-    proofOfDeliveryInput.append('proofOfDeliveryInput',urlSearchParams.toString());
-  */  let str =
-      {
-        proofOfDeliveryInput: JSON.stringify({
-          pickup_request_vehicle_trip_id: pickupRequestVehicleTripId,
-          delivered_to_person: 'xyz',
-          user_id: userId,
-          delivered_date: new Date().toISOString().split("T")[0].split("-").join('/'),
-          delivered_time: new Date().toTimeString().split(":").splice(0,2).join(":"),
-          comment: ''
-        })
-      }
-    this.http.post(this.auth.getRemoteUrl() + '/cargo/api/create_proofOfDelivery', this.getFormUrlEncoded(str),{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
-      console.log(data);
-      this.hasTripStarted = !this.hasTripStarted;
-      if (this.hasTripStarted) {
-        alert("Proof of Delivery Created!");
-      }
-      else {
-        alert("Error in creating Proof of Delivery");
-      }
-    }
-    )
-  }
-
   getData() {
     let userId = this.auth.getUserId();
 
@@ -155,12 +130,63 @@ export class TriplistComponent implements OnInit {
       this.http.get(this.auth.getRemoteUrl() + '/cargo/api/hub/retrieve_tripsheet?vehicleTripId=' + this.vehicleTripId + '&loggedInUserId=' + userId,{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
         console.log(data);
         this.tripList = data;
+        this.googllatlong = data['message'];
       }
       )
     }
 
     )
   }
+
+
+  pod(pickupRequestVehicleTripId) {
+    console.log(pickupRequestVehicleTripId);
+    
+    this.nativeStorage.setItem('pickupRequestTripId',pickupRequestVehicleTripId )
+    .then(() => console.log('Stored pickuprestid Data!'), 
+    error => console.log('Error storing pickup request id', error));
+
+    this.navCtrl.push(MapComponent);
+
+    let userId = this.auth.getUserId();
+    
+ //  let formData: FormData = new FormData(); 
+ /*   let urlSearchParams = new URLSearchParams();
+    urlSearchParams.append('pickup_request_vehicle_trip_assignment', pickupRequestVehicleTripId);
+    urlSearchParams.append('delivered_to_person', '');
+    urlSearchParams.append('user_id', userId);
+    urlSearchParams.append('delivered_date', new Date().toLocaleDateString("EN"));
+    urlSearchParams.append('delivered_time', ""+new Date().getTime());
+    urlSearchParams.append('comment', '');
+    let proofOfDeliveryInput = new URLSearchParams();
+    proofOfDeliveryInput.append('proofOfDeliveryInput',urlSearchParams.toString());
+  */  
+  // let str =
+  //     {
+  //       proofOfDeliveryInput: JSON.stringify({
+  //         pickup_request_vehicle_trip_id: pickupRequestVehicleTripId,
+  //         delivered_to_person: 'xyz',
+  //         user_id: userId,
+  //         delivered_date: new Date().toISOString().split("T")[0].split("-").join('/'),
+  //         delivered_time: new Date().toTimeString().split(":").splice(0,2).join(":"),
+  //         comment: ''
+  //       })
+  //     }
+  //   this.http.post(this.auth.getRemoteUrl() + '/cargo/api/create_proofOfDelivery', this.getFormUrlEncoded(str),{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
+  //     console.log(data);
+  //     this.hasTripStarted = !this.hasTripStarted;
+  //     if (this.hasTripStarted) {
+  //       alert("Proof of Delivery Created!");
+  //     }
+  //     else {
+  //       alert("Error in creating Proof of Delivery");
+  //     }
+  //   }
+  //   )
+  }
+
+  
+  
 
   presentPopover(myEvent) {
     let popover = this.popoverCtrl.create(LogoutComponent);
@@ -171,21 +197,44 @@ export class TriplistComponent implements OnInit {
 
   DisplayMap() {
 
+    this.ismenu = true;
+    this.ismap = false;
+    setTimeout(()=>{
     const location = new google.maps.LatLng(13.0005618, 80.2478447);
-
+      
     const options = {
       center: location,
-      zoom: 10,
+      zoom: 4,
       streetViewControl: false,
     };
-    const map = new google.maps.Map(this.mapRef.nativeElement, options);
-    this.addMarker(location, map);
+
+     this.map = new google.maps.Map(this.contentPlaceholder.nativeElement, options);
+     //this.addMarker(location, this.map);
+    this.getMarkers();
+    google.maps.event.trigger(this.map, 'resize');
+  }, 1000)
+}
+
+  // addMarker(position, map) {
+  //   return new google.maps.Marker({
+  //     position,
+  //     map
+  //   });
+  // }
+
+
+  getMarkers() {
+    if(this.googllatlong.length > 0){
+    for (let i = 0; i < this.googllatlong.length; i++) {
+            this.addMarkersToMap(this.googllatlong[i]);
+      }
+    }
   }
 
-  addMarker(position, map) {
-    return new google.maps.Marker({
-      position,
-      map
-    });
+  addMarkersToMap(triplist) {
+      var position = new google.maps.LatLng(triplist.latitude, triplist.longitude);
+      var triplistMarker = new google.maps.Marker({position: position, title: triplist.name});
+      triplistMarker.setMap(this.map);
   }
+
 }

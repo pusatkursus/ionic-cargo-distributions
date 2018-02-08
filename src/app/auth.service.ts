@@ -9,6 +9,7 @@ export class AuthService {
   windowHandle;
   ourcode;
   accesstoken;
+  contentType;
   remoteUrl = "http://35.154.80.6:8080";
   constructor(public http: HttpClient) { }
 
@@ -33,6 +34,15 @@ export class AuthService {
     let header = new HttpHeaders();
     header.append('Content-Type','application/x-www-form-urlencoded');
     header.append('Authorization',this.getToken());
+    this.setContentType('application/x-www-form-urlencoded');
+    return header;
+  }
+
+  getRequestJSONHeaders(){
+    let header = new HttpHeaders();
+    header.append('Content-Type','application/json');
+    header.append('Authorization',this.getToken());
+    this.setContentType('application/json');
     return header;
   }
 
@@ -51,6 +61,13 @@ export class AuthService {
   getUserId(){
     return this.userId;
   }
+
+  setContentType(data){
+    this.contentType = data;
+   }
+   getContentType(){
+     return this.contentType;
+   }
 
  
 }

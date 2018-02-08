@@ -4,33 +4,25 @@ import { URLSearchParams} from '@angular/http';
 import { AuthService } from '../../app/auth.service';
 import {  NavController } from 'ionic-angular';
 import { TriplistComponent} from '../triplist/triplist.component';
+import { ToastController } from 'ionic-angular';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: []
+  styleUrls: [  ]
 })
 export class LoginComponent implements OnInit {
 
   user = {
-    username: 'krishna_ponnada@yahoo.com',
-    password: '123'
+    username: 'kmrkrsn@gmail.com',
+    password: '456'
   };
   showSpinner: boolean = false;
 
-  constructor(private http: HttpClient, private auth: AuthService,public navCtrl: NavController) { }
+  constructor(private http: HttpClient, private auth: AuthService,public navCtrl: NavController,public toastCtrl: ToastController) { }
 
   ngOnInit() {
   }
-
-  // login2(usercreds) {
-
-  //   let userlogin = this.auth.login(usercreds);
-  //     userlogin.then((res) => {
-  //       if (res)
-  //       this.router.navigate(['/triplist']);
-  //     })
-  // }
 
   login(usercreds) {
     this.showSpinner = true;
@@ -48,23 +40,17 @@ export class LoginComponent implements OnInit {
       console.log(data);
       this.auth.setUserId(data['message']['user_id'])
       this.navCtrl.push(TriplistComponent);
-      
-     } 
-     )
-      
-     // this.router.navigate(['/triplist']);
-      },
-      (err) => {
-        this.showSpinner = false;
-       // this.snackBar.open("E-mail/password invaid", 'ok', {
-        //  duration: 5000
-        //});
-        // console.log("this is new errors ####### "+ err)
-      }
-      )
-
-
-  }
+    })
+  },
+    (err) => {
+      let toast = this.toastCtrl.create({
+        message: 'UserName or password is wrong',
+        duration: 3000
+      });
+      toast.present();
+      console.log("this is new errors ####### "+ err)
+    }
+  )}
 
   
 
