@@ -63,7 +63,7 @@ export class TriplistComponent implements OnInit {
   startTrip() {
     let userId = this.auth.getUserId();
 
-    this.http.get(this.auth.getRemoteUrl() + '/cargo/api/hub/update_vehicleTrip?vehicleTripId=' + this.vehicleTripId + '&status=' + (this.hasTripStarted ? 3 : 2) + '&loggedInUserId=' + userId,{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
+    this.http.get(this.auth.getRemoteUrl() + '/cargo/api/hub/update_vehicleTrip?mobileTripProcessFlag=1&vehicleTripId=' + this.vehicleTripId + '&status=' + (this.hasTripStarted ? 3 : 2) + '&loggedInUserId=' + userId,{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
       console.log(data);
       this.hasTripStarted = !this.hasTripStarted;
       if (this.hasTripStarted) {
@@ -72,6 +72,11 @@ export class TriplistComponent implements OnInit {
       else {
         alert("Trip Ended");
       }
+    }, err =>{
+      if(this.hasTripStarted)
+        alert("Error In Starting the trip!");
+      else
+        alert("Error In Ending the trip!");
     }
     )
   }
@@ -96,17 +101,47 @@ export class TriplistComponent implements OnInit {
         remarks: '',
         unsuccessfullType : 2
       }
+    if(this.vehicleTripStatus ==1) this.startTrip();
       this.http.post(this.auth.getRemoteUrl() + '/cargo/api/hub/unsuccessfull_consignments', JSON.stringify(str),{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
     console.log(data);
-    this.hasTripStarted = !this.hasTripStarted;
-    if (this.hasTripStarted) {
       alert("Consignment has been marked as unsuccessfull!");
-    }
-    else {
-      alert("Error in marking the consignment as unsuccessfull!");
-    }
+  }, err =>{
+    alert("Error in marking the consignment as unsuccessfull!");
   }
   )
+  }
+
+
+  pod(pickupRequestVehicleTripId) {
+    let userId = this.auth.getUserId();
+    
+    this.nativeStorage.setItem('pickupRequestTripId',pickupRequestVehicleTripId )
+    .then(() => console.log('Stored pickuprestid Data!'), 
+    error => console.log('Error storing pickup request id', error));
+
+    this.navCtrl.push(MapComponent);
+
+    
+  let str =
+      {
+        proofOfDeliveryInput: JSON.stringify({
+          pickup_request_vehicle_trip_id: pickupRequestVehicleTripId,
+          delivered_to_person: 'xyz',
+          user_id: userId,
+          delivered_date: new Date().toISOString().split("T")[0].split("-").join('/'),
+          delivered_time: new Date().toTimeString().split(":").splice(0,2).join(":"),
+          comment: ''
+        })
+      }
+
+    if(this.vehicleTripStatus ==1) this.startTrip();
+    this.http.post(this.auth.getRemoteUrl() + '/cargo/api/create_proofOfDelivery', this.getFormUrlEncoded(str),{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
+      console.log(data);
+        alert("Proof of Delivery Created!");
+     }, err =>{
+      alert("Error in creating Proof of Delivery");
+    }
+    )
   }
 
   getData() {
@@ -127,66 +162,19 @@ export class TriplistComponent implements OnInit {
       this.vehicleNo = data['message'].vehicleNo;
       this.model = data['message'].vehicleModelName;
       this.vehicleTripStatus = data['message'].vehicleTripStatus;
+      this.hasTripStarted = this.vehicleTripStatus == 2;
       this.http.get(this.auth.getRemoteUrl() + '/cargo/api/hub/retrieve_tripsheet?vehicleTripId=' + this.vehicleTripId + '&loggedInUserId=' + userId,{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
         console.log(data);
         this.tripList = data;
         this.googllatlong = data['message'];
+      }, err =>{
+        alert("Error in getting triplist");
       }
       )
     }
 
     )
-  }
-
-
-  pod(pickupRequestVehicleTripId) {
-    console.log(pickupRequestVehicleTripId);
-    
-    this.nativeStorage.setItem('pickupRequestTripId',pickupRequestVehicleTripId )
-    .then(() => console.log('Stored pickuprestid Data!'), 
-    error => console.log('Error storing pickup request id', error));
-
-    this.navCtrl.push(MapComponent);
-
-    let userId = this.auth.getUserId();
-    
- //  let formData: FormData = new FormData(); 
- /*   let urlSearchParams = new URLSearchParams();
-    urlSearchParams.append('pickup_request_vehicle_trip_assignment', pickupRequestVehicleTripId);
-    urlSearchParams.append('delivered_to_person', '');
-    urlSearchParams.append('user_id', userId);
-    urlSearchParams.append('delivered_date', new Date().toLocaleDateString("EN"));
-    urlSearchParams.append('delivered_time', ""+new Date().getTime());
-    urlSearchParams.append('comment', '');
-    let proofOfDeliveryInput = new URLSearchParams();
-    proofOfDeliveryInput.append('proofOfDeliveryInput',urlSearchParams.toString());
-  */  
-  // let str =
-  //     {
-  //       proofOfDeliveryInput: JSON.stringify({
-  //         pickup_request_vehicle_trip_id: pickupRequestVehicleTripId,
-  //         delivered_to_person: 'xyz',
-  //         user_id: userId,
-  //         delivered_date: new Date().toISOString().split("T")[0].split("-").join('/'),
-  //         delivered_time: new Date().toTimeString().split(":").splice(0,2).join(":"),
-  //         comment: ''
-  //       })
-  //     }
-  //   this.http.post(this.auth.getRemoteUrl() + '/cargo/api/create_proofOfDelivery', this.getFormUrlEncoded(str),{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
-  //     console.log(data);
-  //     this.hasTripStarted = !this.hasTripStarted;
-  //     if (this.hasTripStarted) {
-  //       alert("Proof of Delivery Created!");
-  //     }
-  //     else {
-  //       alert("Error in creating Proof of Delivery");
-  //     }
-  //   }
-  //   )
-  }
-
-  
-  
+  }  
 
   presentPopover(myEvent) {
     let popover = this.popoverCtrl.create(LogoutComponent);

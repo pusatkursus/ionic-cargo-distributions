@@ -23,7 +23,10 @@
   <div [hidden]="ismenu">
     
   <ion-fab right bottom>
-    <button ion-fab color="vibrant" mini (click)="startTrip()"><ion-icon name="play"></ion-icon></button>
+    <button ion-fab color="vibrant" mini (click)="startTrip()">
+      <ion-icon *ngIf="vehicleTripStatus==1" name="play"></ion-icon>
+      <ion-icon *ngIf="vehicleTripStatus==2" name="close-circle"></ion-icon>
+    </button>
     <ion-fab-list>
 
     </ion-fab-list>
@@ -45,10 +48,10 @@
           <ion-label no-margin> </ion-label>
           <ion-list no-lines item-right>
             <div *ngIf="vehicleTripStatus == 2">
-              <button *ngIf="trip.status == 1" ion-button color="danger" clear (click)="unsuccessful(trip.pickupRequestVehicleTripId)" icon-only>
+              <button ion-button color="danger" clear (click)="unsuccessful(trip.pickupRequestVehicleTripId)" icon-only>
                     <ion-icon name='close-circle' style="color:red;" ></ion-icon>
                </button>
-              <button *ngIf="trip.status == 2" ion-button color="danger" clear (click)="pod(trip.pickupRequestVehicleTripId)" icon-only>
+              <button ion-button color="danger" clear (click)="pod(trip.pickupRequestVehicleTripId)" icon-only>
                   <ion-icon name='checkmark-circle' style="color:green" ></ion-icon>
               </button>
             </div>
