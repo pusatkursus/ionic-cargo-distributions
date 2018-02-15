@@ -61,10 +61,6 @@ export class MapComponent implements OnInit {
     return formBody.join('&');
   }
 
-  
-
-
-
   openSignatureModel(){
     setTimeout(() => {
        let modal = this.modalController.create(SignatureComponent);
