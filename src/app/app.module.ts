@@ -12,7 +12,7 @@ import {TransityInterceptor} from './transity.interceptor';
 import { AuthService } from './auth.service';
 import { LoginComponent } from '../pages/login/login.component';
 import { TriplistComponent } from '../pages/triplist/triplist.component';
-import { ItabsComponent } from '../pages/ionic/itabs/itabs.component';
+import { SkulistComponent } from '../pages/skulist/skulist.component';
 import { LogoutComponent } from '../pages/logout/logout.component'
 import { MapComponent } from '../pages/map/map.component';
 import { Geolocation } from '@ionic-native/geolocation';
@@ -21,13 +21,14 @@ import { SignatureComponent } from '../pages/signature/signature.component'
 import {Camera} from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { NativeStorage } from '@ionic-native/native-storage';
+import { FileUploadModule } from 'ng2-file-upload';
 
 @NgModule({
   declarations: [
     MyApp,
     TriplistComponent,
     LoginComponent,
-    ItabsComponent,
+    SkulistComponent,
     LogoutComponent,
     MapComponent,
     SignatureComponent
@@ -37,14 +38,15 @@ import { NativeStorage } from '@ionic-native/native-storage';
     SignaturePadModule,
     IonicModule.forRoot(MyApp),
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    FileUploadModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
    LoginComponent,
    TriplistComponent,
-   ItabsComponent,
+   SkulistComponent,
    LogoutComponent,
    MapComponent,
    SignatureComponent

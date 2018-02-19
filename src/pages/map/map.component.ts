@@ -9,6 +9,7 @@ import { TriplistComponent } from '../triplist/triplist.component';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { NativeStorage } from '@ionic-native/native-storage';
+import { FileUploader } from 'ng2-file-upload';
 
 
 @Component({
@@ -34,7 +35,8 @@ export class MapComponent implements OnInit {
     private readonly file: File,
     private http: HttpClient,
     private auth: AuthService, 
-    private nativeStorage: NativeStorage
+    private nativeStorage: NativeStorage,
+  //  private uploader : FileUploader
     )
 
     { 
@@ -42,7 +44,21 @@ export class MapComponent implements OnInit {
     }
 
   ngOnInit() {
-    
+   /* this.uploader = new FileUploader({
+      url: this.auth.getRemoteUrl() + '/cargo/api/create_proofOfDelivery',
+      disableMultipart: true, // 'DisableMultipart' must be 'true' for formatDataFunction to be called.
+      formatDataFunctionIsAsync: true,
+      formatDataFunction: async (item) => {
+        return new Promise( (resolve, reject) => {
+          resolve({
+            name: item._file.name,
+            length: item._file.size,
+            contentType: item._file.type,
+            date: new Date()
+          });
+        });
+      }
+    });*/
     this.nativeStorage.getItem('pickupRequestTripId')
    .then(
    data => this.pickupRequestVehicleTripId = data ,

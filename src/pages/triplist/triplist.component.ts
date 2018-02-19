@@ -3,7 +3,7 @@ import { Component, ViewChild, ElementRef, OnInit, AfterViewInit } from '@angula
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../app/auth.service';
 import { NavController } from 'ionic-angular';
-import { ItabsComponent } from '../ionic/itabs/itabs.component';
+import { SkulistComponent } from '../skulist/skulist.component';
 import { PopoverController } from 'ionic-angular';
 import { LogoutComponent } from '../logout/logout.component';
 import { Geolocation } from '@ionic-native/geolocation';
@@ -27,7 +27,7 @@ export class TriplistComponent implements OnInit {
     this.contentPlaceholder = content;
   }
 
-  tripName: string = "hello";
+  tripName: string = "";
   tripList = {};
   vehicleTripId;
   googllatlong: any = [];
@@ -54,11 +54,9 @@ export class TriplistComponent implements OnInit {
     this.ismap = true;
   }
 
-
-
   // this function used for navigate another page like sque page
   squeroot(pickupRequestId, consignee) {
-    this.navCtrl.push(ItabsComponent, { pickupRequestId: pickupRequestId, consignee: consignee });
+    this.navCtrl.push(SkulistComponent, { pickupRequestId: pickupRequestId, consignee: consignee });
   }
   startTrip() {
     let userId = this.auth.getUserId();
@@ -121,7 +119,7 @@ export class TriplistComponent implements OnInit {
 
     this.navCtrl.push(MapComponent);
 
-
+/*
     let str =
       {
         proofOfDeliveryInput: JSON.stringify({
@@ -141,7 +139,7 @@ export class TriplistComponent implements OnInit {
     }, err => {
       alert("Error in creating Proof of Delivery");
     }
-    )
+    )*/
   }
 
   getData() {
