@@ -9,12 +9,14 @@ import { HttpClient,HttpClientModule,HTTP_INTERCEPTORS} from '@angular/common/ht
 import { FormsModule } from '@angular/forms';
 
 import {TransityInterceptor} from './transity.interceptor';
+import {HomeComponent} from '../pages/home/home.component';
 import { AuthService } from './auth.service';
 import { LoginComponent } from '../pages/login/login.component';
 import { TriplistComponent } from '../pages/triplist/triplist.component';
 import { SkulistComponent } from '../pages/skulist/skulist.component';
+import { TripmapComponent } from '../pages/tripmap/tripmap.component';
 import { LogoutComponent } from '../pages/logout/logout.component'
-import { MapComponent } from '../pages/map/map.component';
+import { PodComponent } from '../pages/pod/pod.component';
 import { Geolocation } from '@ionic-native/geolocation';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { SignatureComponent } from '../pages/signature/signature.component'
@@ -30,8 +32,10 @@ import { FileUploadModule } from 'ng2-file-upload';
     LoginComponent,
     SkulistComponent,
     LogoutComponent,
-    MapComponent,
-    SignatureComponent
+    PodComponent,
+    SignatureComponent,
+    HomeComponent,
+    TripmapComponent
   ],
   imports: [
     BrowserModule,
@@ -48,8 +52,10 @@ import { FileUploadModule } from 'ng2-file-upload';
    TriplistComponent,
    SkulistComponent,
    LogoutComponent,
-   MapComponent,
-   SignatureComponent
+   PodComponent,
+   SignatureComponent,
+   HomeComponent,
+   TripmapComponent
 
   ],
   providers: [

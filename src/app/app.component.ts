@@ -3,7 +3,7 @@ import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { LoginComponent } from '../pages/login/login.component';
-import { TriplistComponent } from '../pages/triplist/triplist.component';
+import { HomeComponent } from '../pages/home/home.component';
 import { NativeStorage } from '@ionic-native/native-storage';
 
 @Component({
@@ -19,7 +19,7 @@ export class MyApp {
     // nativeStorage.setItem('accessToken',"hello");
     nativeStorage.getItem('accessToken').then(
       data => {accessToken = data
-        this.rootPage =  accessToken ? TriplistComponent : LoginComponent;
+        this.rootPage =  accessToken ? HomeComponent : LoginComponent;
       },
       err => console.log(err)
     );

@@ -1,7 +1,7 @@
 import { Component, OnInit,ViewChild } from '@angular/core';
 import { NavController} from 'ionic-angular';
 import {SignaturePad} from 'angular2-signaturepad/signature-pad';
-import { MapComponent } from '../map/map.component'
+import { PodComponent } from '../pod/pod.component'
 
 @Component({
   selector: 'app-signature',
@@ -9,6 +9,7 @@ import { MapComponent } from '../map/map.component'
   styleUrls: []
 })
 export class SignatureComponent implements OnInit {
+
   @ViewChild(SignaturePad) public signaturePad : SignaturePad;
 
   public signaturePadOptions : Object = {
@@ -17,7 +18,6 @@ export class SignatureComponent implements OnInit {
     'canvasHeight': 400
   };
   public signatureImage : string;
-
 
   constructor(public navCtrl: NavController) { }
 
@@ -31,12 +31,12 @@ export class SignatureComponent implements OnInit {
   }
 
   drawCancel() {
-    this.navCtrl.push(MapComponent);
+    this.navCtrl.push(PodComponent);
   }
 
    drawComplete() {
     this.signatureImage = this.signaturePad.toDataURL();
-    this.navCtrl.push(MapComponent, {signatureImage: this.signatureImage});
+    this.navCtrl.push(PodComponent, {signatureImage: this.signatureImage});
   }
 
   drawClear() {

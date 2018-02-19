@@ -14,10 +14,10 @@ import { FileUploader } from 'ng2-file-upload';
 
 @Component({
   selector: 'app-map',
-  templateUrl: './map.component.html',
+  templateUrl: './pod.component.html',
   styleUrls: []
 })
-export class MapComponent implements OnInit {
+export class PodComponent implements OnInit {
   public signatureImage : any;
   public pickupRequestVehicleTripId : any ;
   public myPhoto: any;

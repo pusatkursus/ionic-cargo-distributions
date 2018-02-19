@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Trip List</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="presentPopover($event)">
+                  <ion-icon name="more"></ion-icon>
+              </button>
+    </ion-buttons>
+
+  </ion-navbar>
+
+  <ion-toolbar>
+    <ion-item>
+      <p item-start>{{model}}</p>
+      <p item-end>{{vehicleNo}} </p>
+    </ion-item>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content class="padding-new">
+
+  <div [hidden]="ismenu">
+    <triplist (triplistdata)="receiveTriplistData($event)" (vehicledata)="receiveVehicleData($event)"></triplist>
+  </div>
+
+  <div [hidden]="ismap">
+    <tripmap [triplistdata]="triplistdata"></tripmap>
+  </div>
+
+</ion-content>
+
+<ion-footer class="footer-ion">
+  <ion-segment>
+    <ion-segment-button (click)="menuclick()" class="segment-new" value="all">
+      <ion-icon class="icon-color" name="menu"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button (click)="DisplayMap()" class="segment-new" value="favorites">
+      <ion-icon class="icon-color" name="pin"></ion-icon>
+    </ion-segment-button>
+  </ion-segment>
+</ion-footer>
