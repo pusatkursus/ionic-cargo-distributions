@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { URLSearchParams} from '@angular/http';
 import { AuthService } from '../../app/auth.service';
 import {  NavController } from 'ionic-angular';
-import { TriplistComponent} from '../triplist/triplist.component';
+import { HomeComponent} from '../home/home.component';
 import { ToastController } from 'ionic-angular';
 
 @Component({
@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
     this.http.get(this.auth.getRemoteUrl()+'/cargo/api/home?username='+usercreds.username,{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
       console.log(data);
       this.auth.setUserId(data['message']['user_id'])
-      this.navCtrl.push(TriplistComponent);
+      this.navCtrl.push(HomeComponent);
     })
   },
     (err) => {

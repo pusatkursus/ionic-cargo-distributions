@@ -1,14 +1,15 @@
-
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {NavParams} from 'ionic-angular';
-import { AuthService } from '../../../app/auth.service';
+import { AuthService } from '../../app/auth.service';
+
 @Component({
-  selector: 'app-itabs',
-  templateUrl: './itabs.component.html',
-  styleUrls: ['']
+  selector: 'app-skulist',
+  templateUrl: './skulist.component.html',
+  styleUrls: []
 })
-export class ItabsComponent implements OnInit {
+
+export class SkulistComponent implements OnInit {
 
   public pickupRequestId;
   public consignee;

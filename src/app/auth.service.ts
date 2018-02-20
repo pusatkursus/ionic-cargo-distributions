@@ -11,7 +11,8 @@ export class AuthService {
   accesstoken;
   contentType;
   remoteUrl = "http://35.154.80.6:8080";
-  constructor(public http: HttpClient) { }
+  constructor(public http: HttpClient) {
+  }
 
   setToken(data){
     this.accesstoken = "Bearer " +data.access_token;
@@ -19,7 +20,7 @@ export class AuthService {
 
   removeToken(){
     this.accesstoken = null;
-  }
+   }
 
   getLoginHeaders(){
     let header = new HttpHeaders();

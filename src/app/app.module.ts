@@ -9,45 +9,53 @@ import { HttpClient,HttpClientModule,HTTP_INTERCEPTORS} from '@angular/common/ht
 import { FormsModule } from '@angular/forms';
 
 import {TransityInterceptor} from './transity.interceptor';
+import {HomeComponent} from '../pages/home/home.component';
 import { AuthService } from './auth.service';
 import { LoginComponent } from '../pages/login/login.component';
 import { TriplistComponent } from '../pages/triplist/triplist.component';
-import { ItabsComponent } from '../pages/ionic/itabs/itabs.component';
+import { SkulistComponent } from '../pages/skulist/skulist.component';
+import { TripmapComponent } from '../pages/tripmap/tripmap.component';
 import { LogoutComponent } from '../pages/logout/logout.component'
-import { MapComponent } from '../pages/map/map.component';
+import { PodComponent } from '../pages/pod/pod.component';
 import { Geolocation } from '@ionic-native/geolocation';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { SignatureComponent } from '../pages/signature/signature.component'
 import {Camera} from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { NativeStorage } from '@ionic-native/native-storage';
+import { FileUploadModule } from 'ng2-file-upload';
 
 @NgModule({
   declarations: [
     MyApp,
     TriplistComponent,
     LoginComponent,
-    ItabsComponent,
+    SkulistComponent,
     LogoutComponent,
-    MapComponent,
-    SignatureComponent
+    PodComponent,
+    SignatureComponent,
+    HomeComponent,
+    TripmapComponent
   ],
   imports: [
     BrowserModule,
     SignaturePadModule,
     IonicModule.forRoot(MyApp),
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    FileUploadModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
    LoginComponent,
    TriplistComponent,
-   ItabsComponent,
+   SkulistComponent,
    LogoutComponent,
-   MapComponent,
-   SignatureComponent
+   PodComponent,
+   SignatureComponent,
+   HomeComponent,
+   TripmapComponent
 
   ],
   providers: [

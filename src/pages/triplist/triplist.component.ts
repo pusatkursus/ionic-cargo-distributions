@@ -1,64 +1,39 @@
-import { Component, ViewChild, ElementRef, OnInit, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, Output,EventEmitter } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../app/auth.service';
 import { NavController } from 'ionic-angular';
-import { ItabsComponent } from '../ionic/itabs/itabs.component';
-import { PopoverController } from 'ionic-angular';
-import { LogoutComponent } from '../logout/logout.component';
-import { Geolocation } from '@ionic-native/geolocation';
-import { MapComponent } from '../map/map.component';
+import { SkulistComponent } from '../skulist/skulist.component';
+import { PodComponent } from '../pod/pod.component';
 import { NativeStorage } from '@ionic-native/native-storage';
 
-declare var google: any;
-
 @Component({
-  selector: 'app-triplist',
+  selector: 'triplist',
   templateUrl: './triplist.component.html',
   styleUrls: []
 })
 
 export class TriplistComponent implements OnInit {
-
-
-  private contentPlaceholder: ElementRef;
-
-  @ViewChild('contentPlaceholder') set content(content: ElementRef) {
-    this.contentPlaceholder = content;
-  }
-
-  tripName: string = "hello";
+  @Output() triplistdata  = new EventEmitter<string>();
+  @Output() vehicledata  = new EventEmitter();
+  
+  tripName: string = "";
   tripList = {};
   vehicleTripId;
-  googllatlong: any = [];
   hasTripStarted = false;
-  vehicleNo;
-  model;
   consignee;
   vehicleTripStatus;
-  ismenu = false;
-  ismap = true;
-  map: any;
-  constructor(private http: HttpClient, private auth: AuthService, public navCtrl: NavController, public popoverCtrl: PopoverController, public geolocation: Geolocation,
-    private nativeStorage: NativeStorage, ) { }
+  
+  constructor(private http: HttpClient, private auth: AuthService, public navCtrl: NavController, 
+    private nativeStorage: NativeStorage ) { }
 
   ngOnInit(): void {
     this.getData();
   }
-  ngAfterViewInit() {
-    console.log(this.contentPlaceholder);
-  }
-
-  menuclick() {
-    this.ismenu = false;
-    this.ismap = true;
-  }
-
-
 
   // this function used for navigate another page like sque page
   squeroot(pickupRequestId, consignee) {
-    this.navCtrl.push(ItabsComponent, { pickupRequestId: pickupRequestId, consignee: consignee });
+    this.navCtrl.push(SkulistComponent, { pickupRequestId: pickupRequestId, consignee: consignee });
   }
   startTrip() {
     let userId = this.auth.getUserId();
@@ -112,6 +87,7 @@ export class TriplistComponent implements OnInit {
   }
 
 
+
   pod(pickupRequestVehicleTripId) {
     let userId = this.auth.getUserId();
 
@@ -119,9 +95,9 @@ export class TriplistComponent implements OnInit {
       .then(() => console.log('Stored pickuprestid Data!'),
       error => console.log('Error storing pickup request id', error));
 
-    this.navCtrl.push(MapComponent);
+    this.navCtrl.push(PodComponent);
 
-
+/*
     let str =
       {
         proofOfDeliveryInput: JSON.stringify({
@@ -141,7 +117,7 @@ export class TriplistComponent implements OnInit {
     }, err => {
       alert("Error in creating Proof of Delivery");
     }
-    )
+    )*/
   }
 
   getData() {
@@ -159,14 +135,13 @@ export class TriplistComponent implements OnInit {
      )*/
     this.http.get(this.auth.getRemoteUrl() + '/cargo/api/retrieve_vehicleTripDriverAssigned?driverId=' + userId, { headers: this.auth.getRequestHeaders() }).subscribe((data) => {
       this.vehicleTripId = data['message'].vehicleTripId;
-      this.vehicleNo = data['message'].vehicleNo;
-      this.model = data['message'].vehicleModelName;
       this.vehicleTripStatus = data['message'].vehicleTripStatus;
+      this.vehicledata.emit({vehicleNo:data['message'].vehicleNo, model: data['message'].vehicleModelName})
       this.hasTripStarted = this.vehicleTripStatus == 2;
       this.http.get(this.auth.getRemoteUrl() + '/cargo/api/hub/retrieve_tripsheet?vehicleTripId=' + this.vehicleTripId + '&loggedInUserId=' + userId, { headers: this.auth.getRequestHeaders() }).subscribe((data) => {
         console.log(data);
         this.tripList = data;
-        this.googllatlong = data['message'];
+        this.triplistdata.emit(data['message']);
       }, err => {
         alert("Error in getting triplist");
       }
@@ -175,62 +150,4 @@ export class TriplistComponent implements OnInit {
 
     )
   }
-
-  presentPopover(myEvent) {
-    let popover = this.popoverCtrl.create(LogoutComponent);
-    popover.present({
-      ev: myEvent
-    });
-  }
-
-  DisplayMap() {
-
-    this.ismenu = true;
-    this.ismap = false;
-    setTimeout(() => {
-      const location = new google.maps.LatLng(13.0005618, 80.2478447);
-
-      const options = {
-        center: location,
-        zoom: 12,
-        streetViewControl: false,
-      };
-
-      this.map = new google.maps.Map(this.contentPlaceholder.nativeElement, options);
-      //this.addMarker(location, this.map);
-      this.getMarkers();
-      google.maps.event.trigger(this.map, 'resize');
-    }, 1000)
-  }
-
-  getMarkers() {
-    var infowindow = new google.maps.InfoWindow();
-
-    var bounds = new google.maps.LatLngBounds();
-
-    var marker, list = this.googllatlong;
-    if (this.googllatlong.length > 0) {
-      for (let i = 0; i < this.googllatlong.length; i++) {
-        marker = this.addMarkersToMap(this.googllatlong[i]);
-        bounds.extend(marker.getPosition());
-
-        google.maps.event.addListener(marker, 'click', (function (marker, i) {
-          return function () {
-            infowindow.setContent("<div>" + list[i].consigneeName + " | " + list[i].consigneePhoneNo + "</div>" + list[i].locationAddress);
-            infowindow.open(this.map, marker);
-          }
-        })(marker, i));
-      }
-    }
-    this.map.setCenter(bounds.getCenter());
-    this.map.fitBounds(bounds);
-  }
-
-  addMarkersToMap(triplist) {
-    var position = new google.maps.LatLng(triplist.latitude, triplist.longitude);
-    var triplistMarker = new google.maps.Marker({ position: position, title: triplist.name, map: this.map });
-    triplistMarker.setMap(this.map);
-    return triplistMarker;
-  }
-
 }
