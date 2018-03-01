@@ -64,12 +64,6 @@ export class PodComponent implements AfterViewInit {
         "podSignature":{"$ngfBlobUrl":"blob:http://35.154.80.6:8080/677d000c-c4cc-4313-aae7-f311522bab2a"}
       }));
     }; 
-  //   this.nativeStorage.getItem('pickupRequestTripId')
-  //  .then(
-  //  data => {this.pickupRequestVehicleTripId = data
-  // } ,
-  //  error => console.log(error)
-  //  ); 
   }
 
 
@@ -98,10 +92,7 @@ export class PodComponent implements AfterViewInit {
     encodingType: this.camera.EncodingType.PNG,
     saveToPhotoAlbum: true
   }).then(imageData => {
-   
-    // this.myPhoto = imageData;
     this.displayImage(imageData);
-    // this.uploadPhoto(imageData);
   }, error => {
     console.log(JSON.stringify(error));
     
@@ -109,72 +100,40 @@ export class PodComponent implements AfterViewInit {
 }
 
 
-
-private uploadPhoto(imageFileUri: any): void {
-
- /* this.error = null;
-  this.loading = this.loadingCtrl.create({
-    content: 'Uploading...'
-  });
-
-  this.loading.present();
-
-  this.file.resolveLocalFilesystemUrl(imageFileUri)
-    .then(entry => (<FileEntry>entry).file(file => this.readFile(file)))
-    .catch(err => console.log(err));*/
-}
-
-
-
-// private readFile(file: any) {
-//   const reader = new FileReader();
-//   reader.onloadend = () => {
-//     const formData = new FormData();
-//     const imgBlob = new Blob([reader.result], {type: file.type});
-//     console.log(imgBlob);
-//    // formData.append('file', imgBlob, file.name);
-//     // this.postData(formData);
-//   };
-//   reader.readAsArrayBuffer(file);
-// }
-
 private displayImage(imgUri) {
-  this.myPhoto = "data:image/jpeg;base64," + imgUri;;
+  this.myPhoto = "data:image/png;base64," + imgUri;;
   console.log(this.myPhoto);
 }
 
 
 pod(){
+  var isSignImage = false;
   if(this.signatureImage){
+    isSignImage = true;
     let node = document.getElementById('signImage');
     domtoimage.toBlob(node)
         .then((blob) => {
           blob['name'] = 'signatureImage.jpg';
             this.uploader.addToQueue([blob]);
             this.uploader.getNotUploadedItems()[0].alias = "signatureImage";
-            this.uploader.uploadAll();
     });
-    
   }
 
-//   console.log(this.pickupRequestVehicleTripId);
+  if(this.myPhoto){
+    let node = document.getElementById('myPhotoId');
+    domtoimage.toBlob(node)
+        .then((blob) => {
+          blob['name'] = 'photoImage.jpg';
+            this.uploader.addToQueue([blob]);
+            if(isSignImage)
+            this.uploader.getNotUploadedItems()[1].alias = "photoImage";
+            else 
+            this.uploader.getNotUploadedItems()[0].alias = "photoImage";
+    }); 
+  }
+  this.uploader.uploadAll();
 
-//  let str =
-// {
-//   proofOfDeliveryInput: JSON.stringify({
-//     pickup_request_vehicle_trip_id: this.pickupRequestVehicleTripId,
-//     delivered_to_person: 'xyz',
-//     user_id: "13",
-//     delivered_date: new Date().toISOString().split("T")[0].split("-").join('/'),
-//     delivered_time: new Date().toTimeString().split(":").splice(0,2).join(":"),
-//     comment: ''
-//   }),
-//   signatureImage : this.signatureImage,
-//   photoImage : this.myPhoto 
-// }
 
-// this.http.post(this.auth.getRemoteUrl() + '/cargo/api/create_proofOfDelivery', this.getFormUrlEncoded(str),{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
-// console.log(data);
 this.hasTripStarted = !this.hasTripStarted;
 if (this.hasTripStarted) {
   alert("Proof of Delivery Created!"); 
