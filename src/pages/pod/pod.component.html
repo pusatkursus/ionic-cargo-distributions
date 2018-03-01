@@ -28,13 +28,19 @@
 
       <ion-col col-6>
         <div>
-          <img [src]="myPhoto" *ngIf="myPhoto" />
+          <img [src]="myPhoto" id="myPhotoId" *ngIf="myPhoto" />
           <!-- <img [src]="base64Image" *ngIf="base64Image" /> -->
         </div>
       </ion-col>
       <ion-col col-6>
         <div>
-          <img [src]="signatureImage" *ngIf="signatureImage" />
+          <img [src]="signatureImage" id="signImage" *ngIf="signatureImage" />
+       <!--   <input type="file" class="form-control" id="signatureImage" #signatureImage22 name="signatureImage" ng2FileSelect [uploader]="uploader" />
+          <div *ngFor="let item of uploader.queue">
+            <button type="button" class="btn btn-success btn-xs" (click)="item.alias= 'signatureImage'; item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+              <span class="glyphicon glyphicon-upload"></span> Upload
+          </button>
+          </div>-->
         </div>
       </ion-col>
 

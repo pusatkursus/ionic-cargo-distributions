@@ -95,7 +95,7 @@ export class TriplistComponent implements OnInit {
       .then(() => console.log('Stored pickuprestid Data!'),
       error => console.log('Error storing pickup request id', error));
 
-    this.navCtrl.push(PodComponent);
+    this.navCtrl.push(PodComponent,{pickupRequestVehicleTripId:pickupRequestVehicleTripId});
 
 /*
     let str =

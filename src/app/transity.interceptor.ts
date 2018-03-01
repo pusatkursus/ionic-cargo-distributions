@@ -14,7 +14,7 @@ export class TransityInterceptor implements HttpInterceptor {
     let client_secret = 'secret';
     var authReq;
     var basicheader = btoa(client_id + ':' + client_secret);
-    if(!this.auth.getToken()){
+    if(this.auth.getToken()=="null"){
        authReq = req.clone({
         headers: req.headers.set('Authorization','Basic '+basicheader)
         .set('Content-Type', 'application/x-www-form-urlencoded')
