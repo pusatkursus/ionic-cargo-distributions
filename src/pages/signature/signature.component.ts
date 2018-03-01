@@ -1,6 +1,6 @@
 import { Component, OnInit,ViewChild } from '@angular/core';
-import { NavController} from 'ionic-angular';
-import {SignaturePad} from 'angular2-signaturepad/signature-pad';
+import { NavController, NavParams} from 'ionic-angular';
+import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 import { PodComponent } from '../pod/pod.component'
 
 @Component({
@@ -18,8 +18,13 @@ export class SignatureComponent implements OnInit {
     'canvasHeight': 400
   };
   public signatureImage : string;
+  public pickupRequestVehicleTripId;
 
-  constructor(public navCtrl: NavController) { }
+  constructor(public navCtrl: NavController,public navParams:NavParams) 
+  { 
+    this.pickupRequestVehicleTripId = navParams.get('pickupRequestVehicleTripId');
+    }
+
 
   ngOnInit() { }
 
@@ -31,12 +36,12 @@ export class SignatureComponent implements OnInit {
   }
 
   drawCancel() {
-    this.navCtrl.push(PodComponent);
+    this.navCtrl.push(PodComponent,{pickupRequestVehicleTripId:this.pickupRequestVehicleTripId});
   }
 
    drawComplete() {
     this.signatureImage = this.signaturePad.toDataURL();
-    this.navCtrl.push(PodComponent, {signatureImage: this.signatureImage});
+    this.navCtrl.push(PodComponent, {signatureImage: this.signatureImage,pickupRequestVehicleTripId:this.pickupRequestVehicleTripId});
   }
 
   drawClear() {

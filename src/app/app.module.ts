@@ -7,7 +7,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { HttpClient,HttpClientModule,HTTP_INTERCEPTORS} from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-
 import {TransityInterceptor} from './transity.interceptor';
 import {HomeComponent} from '../pages/home/home.component';
 import { AuthService } from './auth.service';
@@ -23,8 +22,9 @@ import { SignatureComponent } from '../pages/signature/signature.component'
 import {Camera} from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { NativeStorage } from '@ionic-native/native-storage';
-import { FileUploadModule } from 'ng2-file-upload';
-
+import { UserdataProvider } from '../providers/userdata/userdata';
+import { FileUploadModule} from 'ng2-file-upload';
+import { FileUploader} from 'ng2-file-upload';
 @NgModule({
   declarations: [
     MyApp,
@@ -56,7 +56,6 @@ import { FileUploadModule } from 'ng2-file-upload';
    SignatureComponent,
    HomeComponent,
    TripmapComponent
-
   ],
   providers: [
     StatusBar,
@@ -64,6 +63,7 @@ import { FileUploadModule } from 'ng2-file-upload';
     Geolocation,
     File,
     NativeStorage,
+    {provide:FileUploader,useClass:FileUploader,deps:[]},
     Camera,
     {provide: ErrorHandler, useClass: IonicErrorHandler},{
       provide : HTTP_INTERCEPTORS,
@@ -73,7 +73,8 @@ import { FileUploadModule } from 'ng2-file-upload';
       provide : AuthService,
       useClass : AuthService,
       deps : []
-    }
+    },
+    UserdataProvider
   ],
 })
 export class AppModule {}

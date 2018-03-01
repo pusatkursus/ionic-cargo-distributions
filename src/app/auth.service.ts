@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { URLSearchParams} from '@angular/http';
+import { NativeStorage } from '@ionic-native/native-storage';
+
+const STORAGE_KEY = 'accesstoken';
+const USER_ID = '';
 
 @Injectable()
 export class AuthService {
@@ -11,9 +15,33 @@ export class AuthService {
   accesstoken;
   contentType;
   remoteUrl = "http://35.154.80.6:8080";
-  constructor(public http: HttpClient) {
+  lstorage;
+  
+  constructor(public storage: NativeStorage) {
+    this.lstorage = this.storage? this.storage : localStorage; 
   }
 
+  setToken(data){
+    this.lstorage.setItem(STORAGE_KEY, "Bearer "+ data.access_token);
+  }
+
+  removeToken(){
+    this.lstorage.setItem(STORAGE_KEY, null);
+  }
+
+  getUserId(){
+    return this.lstorage.getItem(USER_ID);
+  }
+
+  getToken(){
+    return this.lstorage.getItem(STORAGE_KEY);
+  }
+
+  setUserId (userId){
+    this.lstorage.setItem(USER_ID, userId);
+  }
+
+  /*
   setToken(data){
     this.accesstoken = "Bearer " +data.access_token;
   }
@@ -22,6 +50,10 @@ export class AuthService {
     this.accesstoken = null;
    }
 
+   getToken (){
+    return this.accesstoken;
+  }
+*/
   getLoginHeaders(){
     let header = new HttpHeaders();
     let client_id = "my-trusted-client";
@@ -32,10 +64,10 @@ export class AuthService {
   }
 
   getRequestHeaders(){
-    let header = new HttpHeaders();
-    header.append('Content-Type','application/x-www-form-urlencoded');
-    header.append('Authorization',this.getToken());
     this.setContentType('application/x-www-form-urlencoded');
+    let header = new HttpHeaders();
+    header.append('Content-Type',this.getContentType());
+    header.append('Authorization',this.getToken());
     return header;
   }
 
@@ -51,24 +83,12 @@ export class AuthService {
     return this.remoteUrl;
   }
 
-  getToken (){
-    return this.accesstoken;
-  }
-
-  setUserId (userId){
-    this.userId = userId;
-  }
-
-  getUserId(){
-    return this.userId;
-  }
-
   setContentType(data){
     this.contentType = data;
-   }
-   getContentType(){
-     return this.contentType;
-   }
+  }
+  
+  getContentType(){
+    return this.contentType;
+  }
 
- 
 }

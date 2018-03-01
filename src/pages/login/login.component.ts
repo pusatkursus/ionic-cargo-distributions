@@ -38,8 +38,11 @@ export class LoginComponent implements OnInit {
 
     this.http.get(this.auth.getRemoteUrl()+'/cargo/api/home?username='+usercreds.username,{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
       console.log(data);
-      this.auth.setUserId(data['message']['user_id'])
-      this.navCtrl.push(HomeComponent);
+      this.auth.setUserId(data['message']['user_id']);
+      this.navCtrl.push(HomeComponent).then(()=>{
+        const index = this.navCtrl.getActive().index;
+        this.navCtrl.remove(0, index);
+      })
     })
   },
     (err) => {
