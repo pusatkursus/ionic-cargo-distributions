@@ -12,13 +12,15 @@ export class AuthService {
   userId;
   windowHandle;
   ourcode;
-  accesstoken;
+  accesstoken = "null";
   contentType;
   remoteUrl = "http://35.154.80.6:8080";
   lstorage;
   
   constructor(public storage: NativeStorage) {
-    this.lstorage = this.storage? this.storage : localStorage; 
+    this.lstorage = storage? storage : localStorage; 
+    if(this.lstorage.getItem(STORAGE_KEY)==null)
+      this.lstorage.setItem(STORAGE_KEY,"null");
   }
 
   setToken(data){
@@ -59,7 +61,7 @@ export class AuthService {
     let client_id = "my-trusted-client";
     let client_secret = 'secret';
     var basicheader = btoa(client_id + ':' + client_secret);
-    header.append('Authorization','Basic '+basicheader);
+    header.set('Authorization','Basic '+basicheader);
     return header;
   }
 
