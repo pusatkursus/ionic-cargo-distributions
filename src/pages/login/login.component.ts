@@ -5,6 +5,8 @@ import { AuthService } from '../../app/auth.service';
 import {  NavController } from 'ionic-angular';
 import { HomeComponent} from '../home/home.component';
 import { ToastController } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'app-login',
@@ -32,8 +34,7 @@ export class LoginComponent implements OnInit {
     urlSearchParams.append('grant_type','password');
     urlSearchParams.append('client_id','my-trusted-client');
     
-    this.http.post(this.auth.getRemoteUrl()+'/cargo/oauth/token',
-    urlSearchParams.toString(),{headers : this.auth.getLoginHeaders()}).subscribe((data) => {
+    this.loginURL(usercreds, urlSearchParams).subscribe((data) => {
       this.auth.setToken(data);
 
     this.http.get(this.auth.getRemoteUrl()+'/cargo/api/home?username='+usercreds.username,{headers : this.auth.getRequestHeaders()}).subscribe((data) => {
@@ -54,6 +55,11 @@ export class LoginComponent implements OnInit {
       console.log("this is new errors ####### "+ err)
     }
   )}
+
+  loginURL(usercreds, urlSearchParams): Observable<any>{
+    return this.http.post(this.auth.getRemoteUrl()+'/cargo/oauth/token',
+    urlSearchParams.toString(),{headers : this.auth.getLoginHeaders()}).map(data => data.json())
+  }
 
   
 

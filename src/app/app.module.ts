@@ -22,7 +22,6 @@ import { SignatureComponent } from '../pages/signature/signature.component'
 import {Camera} from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { NativeStorage } from '@ionic-native/native-storage';
-import { UserdataProvider } from '../providers/userdata/userdata';
 import { FileUploadModule} from 'ng2-file-upload';
 import { FileUploader} from 'ng2-file-upload';
 @NgModule({
@@ -73,8 +72,7 @@ import { FileUploader} from 'ng2-file-upload';
       provide : AuthService,
       useClass : AuthService,
       deps : []
-    },
-    UserdataProvider
+    }
   ],
 })
 export class AppModule {}
