@@ -1,5 +1,6 @@
+import { LogoutComponent } from './../logout/logout.component';
 import { Component, AfterViewInit, ViewChild } from '@angular/core';
-import { NavController, NavParams, ModalController } from 'ionic-angular';
+import { NavController, NavParams, ModalController ,PopoverController} from 'ionic-angular';
 import { SignatureComponent } from '../signature/signature.component';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { File, FileEntry } from "@ionic-native/file";
@@ -26,8 +27,19 @@ export class PodComponent implements AfterViewInit {
   public error: string;
   private loading: Loading;
   hasTripStarted = false;
+  deliverPerson;
+  Comments;
+  triplistdata;
+  name ;
+  consigneeName ;
+  consigneePhoneNo;
+  locationAddress;
+  weightTonnage;
+  base64Image :string;
+  
 
   constructor(
+
     public navCtrl: NavController,
     public navParams: NavParams,
     public modalController: ModalController,
@@ -37,13 +49,24 @@ export class PodComponent implements AfterViewInit {
     private http: HttpClient,
     private auth: AuthService,
     private nativeStorage: NativeStorage,
-    public uploader: FileUploader
+    public uploader: FileUploader,
+    public popoverCtrl: PopoverController
   ) {
     this.signatureImage = navParams.get('signatureImage');
     this.pickupRequestVehicleTripId = navParams.get('pickupRequestVehicleTripId');
+    this.triplistdata = navParams.get('triplistinfo');
+    
   }
 
   ngAfterViewInit() {
+
+    this.name = this.triplistdata.name ;
+    this.consigneeName = this.triplistdata.consigneeName;
+    this.consigneePhoneNo = this.triplistdata.consigneePhoneNo;
+    this.locationAddress = this.triplistdata.locationAddress;
+    this.weightTonnage = this.triplistdata.weightTonnage;
+    
+  
     this.uploader = new FileUploader({
       url: this.auth.getRemoteUrl() + '/cargo/api/create_proofOfDelivery',
       authToken: this.auth.getToken()
@@ -51,14 +74,15 @@ export class PodComponent implements AfterViewInit {
     });
     this.uploader.onBuildItemForm = (item, form) => {
       let userId = this.auth.getUserId();
+      console.log(userId);
 
       form.append("proofOfDeliveryInput", JSON.stringify({
         pickup_request_vehicle_trip_id: this.pickupRequestVehicleTripId,
-        delivered_to_person: 'newperson',
-        user_id: "13",
+        delivered_to_person: this.deliverPerson,
+        user_id: userId,
         delivered_date: new Date().toISOString().split("T")[0].split("-").join('/'),
         delivered_time: new Date().toTimeString().split(":").splice(0, 2).join(":"),
-        comment: '',
+        comment: this.Comments,
         "podSignature": { "$ngfBlobUrl": "blob:http://35.154.80.6:8080/677d000c-c4cc-4313-aae7-f311522bab2a" }
       }));
     };
@@ -77,7 +101,7 @@ export class PodComponent implements AfterViewInit {
 
   openSignatureModel() {
     setTimeout(() => {
-      let modal = this.modalController.create(SignatureComponent, { pickupRequestVehicleTripId: this.pickupRequestVehicleTripId });
+      let modal = this.modalController.create(SignatureComponent, { pickupRequestVehicleTripId: this.pickupRequestVehicleTripId, triplist:this.triplistdata });
       modal.present();
     }, 300);
 
@@ -85,12 +109,14 @@ export class PodComponent implements AfterViewInit {
   takePhoto() {
     this.camera.getPicture({
       quality: 100,
-      destinationType: this.camera.DestinationType.FILE_URI,
+      destinationType: this.camera.DestinationType.DATA_URL,
       sourceType: this.camera.PictureSourceType.CAMERA,
       encodingType: this.camera.EncodingType.PNG,
-      saveToPhotoAlbum: true
+      saveToPhotoAlbum: false
     }).then(imageData => {
-      this.displayImage(imageData);
+      this.base64Image = "data:image/png;base64," + imageData ;
+
+      // this.displayImage(imageData);
     }, error => {
       console.log(JSON.stringify(error));
 
@@ -98,10 +124,11 @@ export class PodComponent implements AfterViewInit {
   }
 
 
-  private displayImage(imgUri) {
-    this.myPhoto = "data:image/png;base64," + imgUri;;
-    console.log(this.myPhoto);
-  }
+  // private displayImage(imgUri) {
+    
+  //   // this.myPhoto = "data:image/png;base64," + imgUri;
+    
+  // }
 
 
   pod() {
@@ -153,6 +180,13 @@ export class PodComponent implements AfterViewInit {
 
   cancel() {
     this.navCtrl.push(HomeComponent);
+  }
+
+  presentPopover(myEvent) {
+    let popover = this.popoverCtrl.create(LogoutComponent);
+    popover.present({
+      ev: myEvent
+    });
   }
 
 }

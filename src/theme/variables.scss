@@ -43,11 +43,11 @@ $colors: (
 
 // top toolbar
 
-$toolbar-background:color($colors,secondary);
+$toolbar-background:color($colors,primary);
 
 //tab background color
 
-$tabs-background:color($colors,secondary);
+$tabs-background:color($colors,primary);
 $tabs-tab-color-active: color($colors, light);
 $tabs-tab-color-inactive: color($colors, dark);
 

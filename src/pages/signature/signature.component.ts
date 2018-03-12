@@ -19,10 +19,12 @@ export class SignatureComponent implements OnInit {
   };
   public signatureImage : string;
   public pickupRequestVehicleTripId;
+  public triplist ;
 
   constructor(public navCtrl: NavController,public navParams:NavParams) 
   { 
     this.pickupRequestVehicleTripId = navParams.get('pickupRequestVehicleTripId');
+    this.triplist = navParams.get('triplist');
     }
 
 
@@ -36,12 +38,12 @@ export class SignatureComponent implements OnInit {
   }
 
   drawCancel() {
-    this.navCtrl.push(PodComponent,{pickupRequestVehicleTripId:this.pickupRequestVehicleTripId});
+    this.navCtrl.push(PodComponent,{pickupRequestVehicleTripId:this.pickupRequestVehicleTripId,triplistinfo:this.triplist});
   }
 
    drawComplete() {
     this.signatureImage = this.signaturePad.toDataURL();
-    this.navCtrl.push(PodComponent, {signatureImage: this.signatureImage,pickupRequestVehicleTripId:this.pickupRequestVehicleTripId});
+    this.navCtrl.push(PodComponent, {signatureImage: this.signatureImage,pickupRequestVehicleTripId:this.pickupRequestVehicleTripId,triplistinfo:this.triplist});
   }
 
   drawClear() {
