@@ -12,6 +12,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { NativeStorage } from '@ionic-native/native-storage';
 import { FileUploader } from 'ng2-file-upload';
 import * as domtoimage from 'dom-to-image';
+import {FileUploaderCustom} from '../../app/fileuploadercustom'
 
 @Component({
   selector: 'app-map',
@@ -49,7 +50,7 @@ export class PodComponent implements AfterViewInit {
     private http: HttpClient,
     private auth: AuthService,
     private nativeStorage: NativeStorage,
-    public uploader: FileUploader,
+    public uploader: FileUploaderCustom,
     public popoverCtrl: PopoverController
   ) {
     this.signatureImage = navParams.get('signatureImage');
@@ -70,7 +71,7 @@ export class PodComponent implements AfterViewInit {
     this.weightTonnage = this.triplistdata.weightTonnage;
     
   
-    this.uploader = new FileUploader({
+    this.uploader = new FileUploaderCustom({
       url: this.auth.getRemoteUrl() + '/cargo/api/create_proofOfDelivery',
       authToken: this.auth.getToken()
       //headers : [{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},{"Authorization": this.auth.getToken()}]
@@ -179,6 +180,8 @@ export class PodComponent implements AfterViewInit {
               blobArr.push(<File>blob);
               this.uploader.addToQueue(blobArr);
               console.log(this.uploader);
+
+          this.uploadCall();
         }); 
       }
 

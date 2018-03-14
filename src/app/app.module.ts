@@ -24,6 +24,8 @@ import { File } from '@ionic-native/file';
 import { NativeStorage } from '@ionic-native/native-storage';
 import { FileUploadModule} from 'ng2-file-upload';
 import { FileUploader} from 'ng2-file-upload';
+import { FileUploaderCustom } from './fileuploadercustom';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -63,6 +65,7 @@ import { FileUploader} from 'ng2-file-upload';
     File,
     NativeStorage,
     {provide:FileUploader,useClass:FileUploader,deps:[]},
+    {provide:FileUploaderCustom, useClass:FileUploaderCustom,deps:[]},
     Camera,
     {provide: ErrorHandler, useClass: IonicErrorHandler},{
       provide : HTTP_INTERCEPTORS,
