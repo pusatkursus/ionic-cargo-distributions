@@ -15,16 +15,21 @@ export class SignatureComponent implements OnInit {
   public signaturePadOptions : Object = {
     'minWidth': 2,
     'canvasWidth': 340,
-    'canvasHeight': 400
+    'canvasHeight': 420
   };
   public signatureImage : string;
   public pickupRequestVehicleTripId;
   public triplist ;
+  public deliverperson ;
+  public Comments ;
 
   constructor(public navCtrl: NavController,public navParams:NavParams) 
-  { 
+    { 
     this.pickupRequestVehicleTripId = navParams.get('pickupRequestVehicleTripId');
     this.triplist = navParams.get('triplist');
+    this.Comments = navParams.get('Comments');
+    this.deliverperson = navParams.get('deliverperson');
+    
     }
 
 
@@ -38,12 +43,12 @@ export class SignatureComponent implements OnInit {
   }
 
   drawCancel() {
-    this.navCtrl.push(PodComponent,{pickupRequestVehicleTripId:this.pickupRequestVehicleTripId,triplistinfo:this.triplist});
+    this.navCtrl.push(PodComponent,{pickupRequestVehicleTripId:this.pickupRequestVehicleTripId,triplistinfo:this.triplist,deliverperson :this.deliverperson,Comments:this.Comments});
   }
 
    drawComplete() {
     this.signatureImage = this.signaturePad.toDataURL();
-    this.navCtrl.push(PodComponent, {signatureImage: this.signatureImage,pickupRequestVehicleTripId:this.pickupRequestVehicleTripId,triplistinfo:this.triplist});
+    this.navCtrl.push(PodComponent, {signatureImage: this.signatureImage,pickupRequestVehicleTripId:this.pickupRequestVehicleTripId,triplistinfo:this.triplist, deliverperson :this.deliverperson, Comments:this.Comments});
   }
 
   drawClear() {

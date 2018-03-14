@@ -27,7 +27,7 @@ export class MyApp {
       splashScreen.hide();
       statusBar.overlaysWebView(false);
        // set status bar to color
-       statusBar.backgroundColorByHexString('#a9c9ff');
+       statusBar.backgroundColorByHexString('#488aff');
     });
   }
 }

@@ -49,8 +49,7 @@ export class TriplistComponent implements OnInit {
       }
       else {
         alert("Trip Ended");
-        this.getData();
-        
+        this.getData(); 
       }
 
     }
@@ -111,7 +110,7 @@ let alert = this.alertCtrl.create({
           }
             
           if (this.vehicleTripStatus == 1) this.startTrip();
-          this.http.post(this.auth.getRemoteUrl() + '/cargo/api/hub/unsuccessfull_consignments', str, { headers: this.auth.getRequestHeaders() }).subscribe((data) => {
+          this.http.post(this.auth.getRemoteUrl() + '/cargo/api/hub/unsuccessfull_consignments', str, { headers: this.auth.getRequestJSONHeaders() }).subscribe((data) => {
             console.log(data);
             
           }, err => {
@@ -197,6 +196,7 @@ alert.present();
 
     )
   }
+  
 }
 
 

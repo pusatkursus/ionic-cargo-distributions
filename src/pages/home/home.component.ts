@@ -50,6 +50,8 @@ export class HomeComponent implements AfterViewInit {
     });
   }
 
+ 
+
   DisplayMap() {
     this.ismenu = true;
     this.ismap = false;

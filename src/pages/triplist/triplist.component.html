@@ -18,18 +18,20 @@ min-height: 2.4rem !important;
 }
 </style>
 <div>
-  <ion-fab [hidden]="vehicleTripStatus == 3" class="fab-fixed-bottom-right" right bottom fab-fixed>
-    <button ion-fab color="vibrant" mini (click)="startTrip()">
-      <ion-icon *ngIf="vehicleTripStatus==1" name="play"></ion-icon>
-      <ion-icon *ngIf="vehicleTripStatus==2" name="close-circle"></ion-icon>
-    </button>
-    <ion-fab-list>
-
-    </ion-fab-list>
-  </ion-fab>
+  
+  
 
 
   <div *ngIf="tripList.message;else elseBlock">
+      <ion-fab [hidden]="vehicleTripStatus == 3" class="fab-fixed-bottom-right" right bottom fab-fixed>
+          <button ion-fab color="vibrant" mini (click)="startTrip()">
+            <ion-icon *ngIf="vehicleTripStatus==1" name="play"></ion-icon>
+            <ion-icon *ngIf="vehicleTripStatus==2" name="close-circle"></ion-icon>
+          </button>
+          <ion-fab-list>
+      
+          </ion-fab-list>
+        </ion-fab>
     <ion-card class="card-design" *ngFor="let trip of tripList.message">
       <ion-list>
         <ion-item no-lines style="cursor:pointer;" (click)="squeroot(trip.pickupRequestId,trip.consigneeName,trip.consigneePhoneNo)">

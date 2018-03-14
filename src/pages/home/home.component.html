@@ -25,6 +25,11 @@
 
 
 <ion-content class="padding-new">
+    <!-- <ion-refresher  (ionRefresh)="receiveTriplistData($event ,refresher)" >
+        <ion-refresher-content
+          refreshingSpinner="dots">
+        </ion-refresher-content>
+      </ion-refresher> -->
 
   <div [hidden]="ismenu">
     <triplist (triplistdata)="receiveTriplistData($event)" (vehicledata)="receiveVehicleData($event)"></triplist>

@@ -14,7 +14,7 @@ export class AuthService {
   ourcode;
   accesstoken = "null";
   contentType;
-  remoteUrl = "http://35.154.80.6:8080";
+  remoteUrl = "http://localhost:8080";
   lstorage;
   
   constructor(public storage: NativeStorage) {

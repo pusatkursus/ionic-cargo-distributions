@@ -55,7 +55,7 @@
 
   <ion-card>
   <ion-item class="padding-left-5">
-      <ion-label class="font-size" floating>Deliver To*</ion-label>
+      <ion-label class="font-size" floating>Delivered To*</ion-label>
       <ion-input class="font-size" type="text"  name="consigneeAddress1" [(ngModel)]="deliverPerson"  required></ion-input>
   </ion-item>
   <ion-item class="padding-left-5" no-margin>
@@ -81,8 +81,8 @@
     <ion-row>
       <ion-col col-6>
         <div [style.border]="myPhoto ? '1px solid #8f8f8f': 'none'" class="img-hight ">
-          <!-- <img [src]="myPhoto" id="myPhotoId" *ngIf="myPhoto" class="img-hight" /> -->
-          <img [src]="base64Image" *ngIf="base64Image" />
+          <img [src]="myPhoto" id="myPhotoId" *ngIf="myPhoto" class="img-hight" />
+          <!-- <img [src]="base64Image" *ngIf="base64Image" /> -->
         </div>
       </ion-col>
         
@@ -91,7 +91,7 @@
         <div  [style.border]="signatureImage ? '1px solid #8f8f8f': 'none'" class="img-hight " >
             
           <img [src]="signatureImage" id="signImage" *ngIf="signatureImage" class="img-hight"  />
-       <!--   <input type="file" class="form-control" id="signatureImage" #signatureImage22 name="signatureImage" ng2FileSelect [uploader]="uploader" />
+       <!--   <input type="file" class="form-control" id="signatureImage" #signatureImage22 name="signatureImage"   FileSelect [uploader]="uploader" />
           <div *ngFor="let item of uploader.queue">
             <button type="button" class="btn btn-success btn-xs" (click)="item.alias= 'signatureImage'; item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
               <span class="glyphicon glyphicon-upload"></span> Upload
@@ -106,17 +106,14 @@
   </ion-grid>
     <div class="row">
         <div col>
-
-       
             <button (click)="cancel()" class="withofbtn" ion-button solid color="save">
                   Cancel
             </button>
           </div>
       <div col>
-        
         <button (click)="pod()" class="withofbtn" ion-button solid color="save">
             Submit
-          </button>
+        </button>
    
         </div>
         
