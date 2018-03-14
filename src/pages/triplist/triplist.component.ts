@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef, OnInit, Output,EventEmitter } from '@
 
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../app/auth.service';
-import { NavController } from 'ionic-angular';
+import { NavController ,AlertController } from 'ionic-angular';
 import { SkulistComponent } from '../skulist/skulist.component';
 import { PodComponent } from '../pod/pod.component';
 import { NativeStorage } from '@ionic-native/native-storage';
@@ -23,30 +23,39 @@ export class TriplistComponent implements OnInit {
   hasTripStarted = false;
   consignee;
   vehicleTripStatus;
+  tripended = false;
   
   constructor(private http: HttpClient, private auth: AuthService, public navCtrl: NavController, 
-    private nativeStorage: NativeStorage ) { }
+    private nativeStorage: NativeStorage,private alertCtrl: AlertController ) { }
 
   ngOnInit(): void {
     this.getData();
   }
 
   // this function used for navigate another page like sque page
-  squeroot(pickupRequestId, consignee) {
-    this.navCtrl.push(SkulistComponent, { pickupRequestId: pickupRequestId, consignee: consignee });
+  squeroot(pickupRequestId, consignee,consno) {
+    this.navCtrl.push(SkulistComponent, { pickupRequestId: pickupRequestId, consignee: consignee ,consigneeno:consno });
   }
   startTrip() {
     let userId = this.auth.getUserId();
 
     this.http.get(this.auth.getRemoteUrl() + '/cargo/api/hub/update_vehicleTrip?mobileTripProcessFlag=1&vehicleTripId=' + this.vehicleTripId + '&status=' + (this.hasTripStarted ? 3 : 2) + '&loggedInUserId=' + userId, { headers: this.auth.getRequestHeaders() }).subscribe((data) => {
       console.log(data);
-      this.hasTripStarted = !this.hasTripStarted;
+      if(data['status'] = "success"){
+        this.hasTripStarted = !this.hasTripStarted;
       if (this.hasTripStarted) {
         alert("Trip has started!");
+        this.getData();
       }
       else {
         alert("Trip Ended");
+        this.getData(); 
       }
+
+    }
+    if(data['status'] = "error"){
+      alert("unable to stop trip")
+    } 
     }, err => {
       if (this.hasTripStarted)
         alert("Error In Starting the trip!");
@@ -67,35 +76,71 @@ export class TriplistComponent implements OnInit {
   }
 
   unsuccessful(pickupRequestVehicleTripId) {
-    let userId = this.auth.getUserId();
-    let str = {
-      pickupRequestVehicleTripId: pickupRequestVehicleTripId,
-      loggedInUserId: userId,
-      attemptedDate: new Date().toISOString().split("T")[0].split("-").join('/'),
-      attemptedTime: new Date().toTimeString().split(":").splice(0, 2).join(":"),
-      remarks: '',
-      unsuccessfullType: 2
+
+let alert = this.alertCtrl.create({
+  title: 'Reson For Cancel ? ',
+  inputs: [
+    {
+      id: 'reson',
+      name: 'reson',
+      placeholder: 'Reson',
+      type: 'text'
     }
-    if (this.vehicleTripStatus == 1) this.startTrip();
-    this.http.post(this.auth.getRemoteUrl() + '/cargo/api/hub/unsuccessfull_consignments', JSON.stringify(str), { headers: this.auth.getRequestHeaders() }).subscribe((data) => {
-      console.log(data);
-      alert("Consignment has been marked as unsuccessfull!");
-    }, err => {
-      alert("Error in marking the consignment as unsuccessfull!");
+  ],
+  buttons: [
+    {
+      text: 'Cancel',
+      role: 'cancel',
+      handler: data => {
+        console.log('Cancel clicked');
+      }
+    },
+    {
+      text: 'Ok',
+      handler: data => {
+        if (data.reson) {
+          let userId = this.auth.getUserId();
+          let str = {
+            pickupRequestVehicleTripId: pickupRequestVehicleTripId,
+            loggedInUserId: userId,
+            attemptedDate: new Date().toISOString().split("T")[0].split("-").join('/'),
+            attemptedTime: new Date().toTimeString().split(":").splice(0, 2).join(":"),
+            remarks: data.reson,
+            unsuccessfullType: 2
+          }
+            
+          if (this.vehicleTripStatus == 1) this.startTrip();
+          this.http.post(this.auth.getRemoteUrl() + '/cargo/api/hub/unsuccessfull_consignments', str, { headers: this.auth.getRequestJSONHeaders() }).subscribe((data) => {
+            console.log(data);
+            
+          }, err => {
+            // alert("Error in marking the consignment as unsuccessfull!");
+            console.log(err);
+          }
+          )
+           
+            } else {
+            console.log("invalid user name password");
+            return false;
+        }
+      }
     }
-    )
+  ]
+});
+alert.present();
+
   }
 
 
 
-  pod(pickupRequestVehicleTripId) {
+  pod(pickupRequestVehicleTripId,trip) {
     let userId = this.auth.getUserId();
 
     this.nativeStorage.setItem('pickupRequestTripId', pickupRequestVehicleTripId)
       .then(() => console.log('Stored pickuprestid Data!'),
       error => console.log('Error storing pickup request id', error));
 
-    this.navCtrl.push(PodComponent,{pickupRequestVehicleTripId:pickupRequestVehicleTripId});
+    this.navCtrl.push(PodComponent,{pickupRequestVehicleTripId:pickupRequestVehicleTripId,triplistinfo:trip});
 
 /*
     let str =
@@ -143,11 +188,35 @@ export class TriplistComponent implements OnInit {
         this.tripList = data;
         this.triplistdata.emit(data['message']);
       }, err => {
-        alert("Error in getting triplist");
+        // alert("Error in getting triplist");
+        console.log("Error in getting triplist");
       }
       )
     }
 
     )
   }
+  
 }
+
+
+
+
+
+// let userId = this.auth.getUserId();
+//     let str = {
+//       pickupRequestVehicleTripId: pickupRequestVehicleTripId,
+//       loggedInUserId: userId,
+//       attemptedDate: new Date().toISOString().split("T")[0].split("-").join('/'),
+//       attemptedTime: new Date().toTimeString().split(":").splice(0, 2).join(":"),
+//       remarks: '',
+//       unsuccessfullType: 2
+//     }
+//     if (this.vehicleTripStatus == 1) this.startTrip();
+//     this.http.post(this.auth.getRemoteUrl() + '/cargo/api/hub/unsuccessfull_consignments', JSON.stringify(str), { headers: this.auth.getRequestHeaders() }).subscribe((data) => {
+//       console.log(data);
+//       alert("Consignment has been marked as unsuccessfull!");
+//     }, err => {
+//       alert("Error in marking the consignment as unsuccessfull!");
+//     }
+//     )

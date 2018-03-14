@@ -1,6 +1,38 @@
+<style>
+    .margin-0{
+   margin:0px !important;
+  }
+  .margin-0 .text-input-md{
+    margin:0px !important;
+  }
+  .item-md {
+   font-size: 13px !important;
+  }
+  .font-size {
+  font-size:13px !important;
+  }
+  .item-height{
+  min-height: 2.4rem !important;
+  }
+  padding-left-5{
+    padding-left: 5px !important;
+  }
+  .img-hight{
+    height: 160px;
+  }
+  .withofbtn{
+    width: 100% !important;
+  }
+  .border-black{
+    border:1px solid #8f8f8f;
+  }
+  .margin-header-title{
+    margin-right:-23px !important;
+  }
+  </style>
 <ion-header>
-  <ion-navbar hideBackButton>
-    <ion-title>POD</ion-title>
+  <ion-navbar   hideBackButton>
+    <ion-title class="margin-header-title" text-center>POD</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="presentPopover($event)">
                 <ion-icon name="more"></ion-icon>
@@ -11,53 +43,84 @@
 </ion-header>
 
 <ion-content>
+    <ion-card class="card-design">
+        <ion-list>
+          <ion-item no-lines>
+            <h3>{{name}}</h3>
+            <p class="font-size"><span>{{consigneeName}}</span> | <span>{{consigneePhoneNo}}</span></p>
+            <p class="font-size" style="white-space: normal;">{{locationAddress}} </p>
+          </ion-item>
+        </ion-list>
+      </ion-card>
 
+  <ion-card>
+  <ion-item class="padding-left-5">
+      <ion-label class="font-size" floating>Delivered To*</ion-label>
+      <ion-input class="font-size" type="text"  name="consigneeAddress1" [(ngModel)]="deliverPerson"  required></ion-input>
+  </ion-item>
+  <ion-item class="padding-left-5" no-margin>
+      <ion-label class="font-size" floating>Comments*</ion-label>
+      <ion-input class="font-size" no-margin  [(ngModel)]="Comments" name="Comments"  autocorrect="on">
+      </ion-input>
+  </ion-item>
+</ion-card>
+  
   <ion-grid>
     <ion-row>
-      <ion-col col-4>
-        <button ion-button full color="light" (click)="takePhoto()">
-      <ion-icon name="camera"></ion-icon>Camara</button>
+      <ion-col col>
+        <button class="font-size" ion-button full color="light" (click)="takePhoto()">
+      <ion-icon name="camera"></ion-icon> Camera</button>
       </ion-col>
-      <ion-col col-4>
-      </ion-col>
-      <ion-col col-4>
-        <button ion-button full color="secondary" (click)="openSignatureModel()">Signature</button>
+     
+      <ion-col col>
+        <button class="font-size" ion-button full color="light"  (click)="openSignatureModel()">
+            <ion-icon name="create"></ion-icon> Signature</button>
       </ion-col>
     </ion-row>
+    
     <ion-row>
-
       <ion-col col-6>
-        <div>
-          <img [src]="myPhoto" id="myPhotoId" *ngIf="myPhoto" />
+        <div [style.border]="myPhoto ? '1px solid #8f8f8f': 'none'" class="img-hight ">
+          <img [src]="myPhoto" id="myPhotoId" *ngIf="myPhoto" class="img-hight" />
           <!-- <img [src]="base64Image" *ngIf="base64Image" /> -->
         </div>
       </ion-col>
+        
+        
       <ion-col col-6>
-        <div>
-          <img [src]="signatureImage" id="signImage" *ngIf="signatureImage" />
-       <!--   <input type="file" class="form-control" id="signatureImage" #signatureImage22 name="signatureImage" ng2FileSelect [uploader]="uploader" />
+        <div  [style.border]="signatureImage ? '1px solid #8f8f8f': 'none'" class="img-hight " >
+            
+          <img [src]="signatureImage" id="signImage" *ngIf="signatureImage" class="img-hight"  />
+       <!--   <input type="file" class="form-control" id="signatureImage" #signatureImage22 name="signatureImage"   FileSelect [uploader]="uploader" />
           <div *ngFor="let item of uploader.queue">
             <button type="button" class="btn btn-success btn-xs" (click)="item.alias= 'signatureImage'; item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
               <span class="glyphicon glyphicon-upload"></span> Upload
           </button>
           </div>-->
+       
         </div>
       </ion-col>
-
+    
     </ion-row>
+  
   </ion-grid>
-  <ion-footer>
-    <ion-toolbar color="secondary">
-      <ion-buttons right>
-        <button (click)="pod()" ion-button solid color="save">
-              Submit
+    <div class="row">
+        <div col>
+            <button (click)="cancel()" class="withofbtn" ion-button solid color="save">
+                  Cancel
             </button>
-      </ion-buttons>
-      <ion-buttons left>
-        <button (click)="cancel()" ion-button solid color="save">
-              Cancel
-            </button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-footer>
+          </div>
+      <div col>
+        <button (click)="pod()" class="withofbtn" ion-button solid color="save">
+            Submit
+        </button>
+   
+        </div>
+        
+    </div>
+      
+ 
+
+
+
 </ion-content>

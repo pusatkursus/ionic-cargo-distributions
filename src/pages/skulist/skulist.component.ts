@@ -13,12 +13,14 @@ export class SkulistComponent implements OnInit {
 
   public pickupRequestId;
   public consignee;
+  consineeNo;
   skuItems = {list:[
 ]};
 
   constructor(private http: HttpClient, public navParams: NavParams,  private auth: AuthService) {
     this.pickupRequestId = this.navParams.get('pickupRequestId');
     this.consignee = this.navParams.get('consignee');
+    this.consineeNo = this.navParams.get('consigneeno');
    }
 
   ngOnInit() {

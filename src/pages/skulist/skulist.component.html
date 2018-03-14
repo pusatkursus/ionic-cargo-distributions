@@ -1,6 +1,29 @@
+<style>
+    .margin-0{
+   margin:0px !important;
+  }
+  .item-md {
+   font-size: 13px !important;
+  }
+  .font-size {
+  font-size:13px !important;
+  }
+  .item-height{
+  min-height: 2.4rem !important;
+  }
+  padding-left-5{
+    padding-left: 5px !important;
+  }
+  .text-center{
+    text-align: center !important;
+  }
+  .margin-header-title{
+    margin-right:32px !important;
+  }
+  </style>
 <ion-header>
   <ion-navbar>
-    <ion-title>
+    <ion-title class="margin-header-title" text-center>
       ITEM LIST
     </ion-title>
     <ion-buttons end>
@@ -12,8 +35,9 @@
 
 
   <ion-toolbar>
-    <ion-item center>
-      <p>{{consignee}}</p>
+    <ion-item>
+        <p class="font-size" item-start>{{consignee}}</p>
+        <p class="font-size" item-end>{{consineeNo}}</p>
     </ion-item>
   </ion-toolbar>
 </ion-header>
@@ -24,8 +48,8 @@
     <ion-card>
       <ion-item>
         <h3 item-start>{{skuItem.item_code}}</h3>
-        <div>{{skuItem.itemDescription}}</div>
-        <strong item-end>{{skuItem.quantity}}</strong>
+        <div class="font-size" >{{skuItem.itemDescription}}</div>
+        <strong class="font-size" item-end>{{skuItem.quantity}}</strong>
       </ion-item>
     </ion-card>
   </ion-list>

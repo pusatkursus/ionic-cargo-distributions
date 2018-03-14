@@ -31,6 +31,7 @@ export class TripmapComponent implements OnInit {
         center: location,
         zoom: 6,
         streetViewControl: false,
+        fullscreenControl: false,
       };
 
       this.map = new google.maps.Map(this.contentPlaceholder.nativeElement, options);

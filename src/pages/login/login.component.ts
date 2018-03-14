@@ -14,8 +14,8 @@ import { ToastController } from 'ionic-angular';
 export class LoginComponent implements OnInit {
 
   user = {
-    username: 'krishna_ponnada@yahoo.com',
-    password: '123'
+    username: '',
+    password: ''
   };
   showSpinner: boolean = false;
 

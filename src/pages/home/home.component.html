@@ -1,9 +1,14 @@
+<style>
+  .margin-header-title{
+    margin-right:-23px !important; 
+  }
+</style>
 <ion-header>
-  <ion-navbar>
-    <ion-title>Trip List</ion-title>
+  <ion-navbar hideBackButton >
+    <ion-title text-center class="margin-header-title" >TRIP LIST</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="presentPopover($event)">
-                  <ion-icon name="more"></ion-icon>
+                  <ion-icon name="contact"></ion-icon>
               </button>
     </ion-buttons>
 
@@ -20,6 +25,11 @@
 
 
 <ion-content class="padding-new">
+    <!-- <ion-refresher  (ionRefresh)="receiveTriplistData($event ,refresher)" >
+        <ion-refresher-content
+          refreshingSpinner="dots">
+        </ion-refresher-content>
+      </ion-refresher> -->
 
   <div [hidden]="ismenu">
     <triplist (triplistdata)="receiveTriplistData($event)" (vehicledata)="receiveVehicleData($event)"></triplist>

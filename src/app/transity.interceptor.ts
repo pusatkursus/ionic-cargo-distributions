@@ -23,8 +23,8 @@ export class TransityInterceptor implements HttpInterceptor {
     else {
        authReq = req.clone({
         headers: req.headers.set('Authorization',this.auth.getToken())
-        .set('Content-Type', 'application/x-www-form-urlencoded')
-    });
+        .set('Content-Type', this.auth.getContentType())
+      });
   }
     
 

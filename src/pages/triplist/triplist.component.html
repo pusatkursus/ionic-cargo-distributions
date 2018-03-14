@@ -1,35 +1,55 @@
+<style>
+  .margin-0{
+ margin:0px !important;
+}
+.item-md {
+ font-size: 13px !important;
+}
+.font-size {
+font-size:13px !important;
+}
+.item-height{
+min-height: 2.4rem !important;
+}
+.fab-fixed-bottom-right{
+  z-index: 9999;
+  position:fixed;
+  margin-bottom: 50px; 
+}
+</style>
 <div>
-
-  <ion-fab right bottom>
-    <button ion-fab color="vibrant" mini (click)="startTrip()">
-      <ion-icon *ngIf="vehicleTripStatus==1" name="play"></ion-icon>
-      <ion-icon *ngIf="vehicleTripStatus==2" name="close-circle"></ion-icon>
-    </button>
-    <ion-fab-list>
-
-    </ion-fab-list>
-  </ion-fab>
+  
+  
 
 
   <div *ngIf="tripList.message;else elseBlock">
+      <ion-fab [hidden]="vehicleTripStatus == 3" class="fab-fixed-bottom-right" right bottom fab-fixed>
+          <button ion-fab color="vibrant" mini (click)="startTrip()">
+            <ion-icon *ngIf="vehicleTripStatus==1" name="play"></ion-icon>
+            <ion-icon *ngIf="vehicleTripStatus==2" name="close-circle"></ion-icon>
+          </button>
+          <ion-fab-list>
+      
+          </ion-fab-list>
+        </ion-fab>
     <ion-card class="card-design" *ngFor="let trip of tripList.message">
       <ion-list>
-        <ion-item no-lines style="cursor:pointer;" (click)="squeroot(trip.pickupRequestId,trip.consigneeName)">
+        <ion-item no-lines style="cursor:pointer;" (click)="squeroot(trip.pickupRequestId,trip.consigneeName,trip.consigneePhoneNo)">
           <h3>{{trip.name}}</h3>
-          <p class="fontview"><span>{{trip.consigneeName}}</span> | <span>{{trip.consigneePhoneNo}}</span></p>
-          <p style="white-space: normal;">{{trip.locationAddress}} </p>
+          <p class="font-size"><span>{{trip.consigneeName}}</span> | <span>{{trip.consigneePhoneNo}}</span></p>
+          <p class="font-size" style="white-space: normal;">{{trip.locationAddress}} </p>
         </ion-item>
 
 
         <ion-item no-margin>
           <ion-label no-margin> {{trip.weightTonnage}} tons </ion-label>
           <ion-label no-margin> </ion-label>
-          <ion-list no-lines item-right>
+          <ion-list no-lines no-margin class="margin-0" item-right>
             <div *ngIf="vehicleTripStatus == 2">
               <button ion-button color="danger" clear (click)="unsuccessful(trip.pickupRequestVehicleTripId)" icon-only>
                     <ion-icon name='close-circle' style="color:red;" ></ion-icon>
                </button>
-              <button ion-button color="danger" clear (click)="pod(trip.pickupRequestVehicleTripId)" icon-only>
+              <button ion-button color="danger" clear (click)="pod(trip.pickupRequestVehicleTripId,trip)" icon-only>
                   <ion-icon name='checkmark-circle' style="color:green" ></ion-icon>
               </button>
             </div>

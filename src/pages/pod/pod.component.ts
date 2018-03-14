@@ -1,5 +1,6 @@
+import { LogoutComponent } from './../logout/logout.component';
 import { Component, AfterViewInit, ViewChild } from '@angular/core';
-import { NavController, NavParams, ModalController } from 'ionic-angular';
+import { NavController, NavParams, ModalController ,PopoverController} from 'ionic-angular';
 import { SignatureComponent } from '../signature/signature.component';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { File, FileEntry } from "@ionic-native/file";
@@ -26,8 +27,19 @@ export class PodComponent implements AfterViewInit {
   public error: string;
   private loading: Loading;
   hasTripStarted = false;
+  deliverPerson;
+  Comments;
+  triplistdata;
+  name ;
+  consigneeName ;
+  consigneePhoneNo;
+  locationAddress;
+  weightTonnage;
+
+  
 
   constructor(
+
     public navCtrl: NavController,
     public navParams: NavParams,
     public modalController: ModalController,
@@ -37,13 +49,27 @@ export class PodComponent implements AfterViewInit {
     private http: HttpClient,
     private auth: AuthService,
     private nativeStorage: NativeStorage,
-    public uploader: FileUploader
+    public uploader: FileUploader,
+    public popoverCtrl: PopoverController
   ) {
     this.signatureImage = navParams.get('signatureImage');
     this.pickupRequestVehicleTripId = navParams.get('pickupRequestVehicleTripId');
+    this.triplistdata = navParams.get('triplistinfo');
+    this.Comments = navParams.get('Comments');
+    this.deliverPerson = navParams.get('deliverperson');
   }
 
   ngAfterViewInit() {
+
+    console.log("i am here");
+
+    this.name = this.triplistdata.name ;
+    this.consigneeName = this.triplistdata.consigneeName;
+    this.consigneePhoneNo = this.triplistdata.consigneePhoneNo;
+    this.locationAddress = this.triplistdata.locationAddress;
+    this.weightTonnage = this.triplistdata.weightTonnage;
+    
+  
     this.uploader = new FileUploader({
       url: this.auth.getRemoteUrl() + '/cargo/api/create_proofOfDelivery',
       authToken: this.auth.getToken()
@@ -51,15 +77,16 @@ export class PodComponent implements AfterViewInit {
     });
     this.uploader.onBuildItemForm = (item, form) => {
       let userId = this.auth.getUserId();
+      console.log(userId);
 
       form.append("proofOfDeliveryInput", JSON.stringify({
         pickup_request_vehicle_trip_id: this.pickupRequestVehicleTripId,
-        delivered_to_person: 'newperson',
-        user_id: "13",
+        delivered_to_person: this.deliverPerson,
+        user_id: userId,
         delivered_date: new Date().toISOString().split("T")[0].split("-").join('/'),
         delivered_time: new Date().toTimeString().split(":").splice(0, 2).join(":"),
-        comment: '',
-        "podSignature": { "$ngfBlobUrl": "blob:http://35.154.80.6:8080/677d000c-c4cc-4313-aae7-f311522bab2a" }
+        comment: this.Comments,
+        
       }));
     };
   }
@@ -77,18 +104,20 @@ export class PodComponent implements AfterViewInit {
 
   openSignatureModel() {
     setTimeout(() => {
-      let modal = this.modalController.create(SignatureComponent, { pickupRequestVehicleTripId: this.pickupRequestVehicleTripId });
+      let modal = this.modalController.create(SignatureComponent, { pickupRequestVehicleTripId: this.pickupRequestVehicleTripId, triplist:this.triplistdata,deliverperson :this.deliverPerson,Comments:this.Comments });
       modal.present();
     }, 300);
-
   }
+  
   takePhoto() {
     this.camera.getPicture({
       quality: 100,
-      destinationType: this.camera.DestinationType.FILE_URI,
+      targetWidth: 420,
+      destinationType: this.camera.DestinationType.DATA_URL,
       sourceType: this.camera.PictureSourceType.CAMERA,
-      encodingType: this.camera.EncodingType.PNG,
+      encodingType: this.camera.EncodingType.JPEG,
       saveToPhotoAlbum: true
+      
     }).then(imageData => {
       this.displayImage(imageData);
     }, error => {
@@ -99,48 +128,94 @@ export class PodComponent implements AfterViewInit {
 
 
   private displayImage(imgUri) {
-    this.myPhoto = "data:image/png;base64," + imgUri;;
-    console.log(this.myPhoto);
+    this.myPhoto = "data:image/JPEG;base64," + imgUri;
   }
 
 
   pod() {
     var isSignImage = false;
-    if (this.signatureImage) {
+    let blobArr = [] ;
+
+    if (this.signatureImage && this.myPhoto) {
+      
       isSignImage = true;
       let node = document.getElementById('signImage');
       domtoimage.toBlob(node)
         .then((blob) => {
           blob['name'] = 'signatureImage.jpg';
-          this.uploader.addToQueue([blob]);
-          this.uploader.getNotUploadedItems()[0].alias = "signatureImage";
-
+          blobArr.push(<File>blob);
+          
+          //  this.uploader.addToQueue([blob]);
+          //  this.uploader.getNotUploadedItems()[0].alias = "signatureImage";
+          //  this.uploader.addToQueue(blobArr);
+          //  this.uploader.getNotUploadedItems()[0].alias = "signatureImage";
+      
           if (this.myPhoto) {
             let node = document.getElementById('myPhotoId');
             domtoimage.toBlob(node)
               .then((blob) => {
                 blob['name'] = 'photoImage.jpg';
-                this.uploader.addToQueue([blob]);
-                if (isSignImage)
-                  this.uploader.getNotUploadedItems()[1].alias = "photoImage";
+                blobArr.push(<File>blob);
+               /*  if (isSignImage)
+                  // this.uploader.getNotUploadedItems()[1].alias = "photoImage";
+                  console.log("new alias one");
                 else
-                  this.uploader.getNotUploadedItems()[0].alias = "photoImage";
+                  // this.uploader.getNotUploadedItems()[0].alias = "photoImage";
+                  console.log("new alias two");
+                this.uploadCall(); */
+                this.uploader.addToQueue(blobArr);
                 this.uploadCall();
               });
-          } else {
-            this.uploadCall();
-          }
+            }   
+          }); 
+        }
+        else{
+        if(this.signatureImage){
+          isSignImage = true;
+          let node = document.getElementById('signImage');
+          domtoimage.toBlob(node)
+            .then((blob) => {
+              blob['name'] = 'signatureImage.jpg';       
+              blobArr.push(<File>blob);
+              this.uploader.addToQueue(blobArr);
+              console.log(this.uploader);
+        }); 
+      }
+
+        if(this.myPhoto){
+          console.log("pic");
+
+          let node = document.getElementById('myPhotoId');
+          domtoimage.toBlob(node)
+            .then((blob) => {
+              console.log(blob);
+              blob['name'] = 'photoImage.jpg';
+              console.log(blob);
+              blobArr.push(<File>blob);
+             console.log(blobArr);
+              console.log(this.uploader);
+             /*  if (isSignImage)
+                // this.uploader.getNotUploadedItems()[1].alias = "photoImage";
+                console.log("new alias one");
+              else
+                // this.uploader.getNotUploadedItems()[0].alias = "photoImage";
+                console.log("new alias two");
+              this.uploadCall(); */
+              this.uploader.addToQueue(blobArr);
+        console.log(this.uploader);
+        
+          this.uploadCall();
         });
-    }
-
-
-
-
+        }
+      }
     // });
   }
 
   uploadCall() {
-    this.uploader.uploadAll();
+    console.log(" ################");
+    console.log( this.uploader);
+    console.log(" ################");
+   this.uploader.uploadAll();
     this.hasTripStarted = !this.hasTripStarted;
     if (this.hasTripStarted) {
       alert("Proof of Delivery Created!");
@@ -153,6 +228,13 @@ export class PodComponent implements AfterViewInit {
 
   cancel() {
     this.navCtrl.push(HomeComponent);
+  }
+
+  presentPopover(myEvent) {
+    let popover = this.popoverCtrl.create(LogoutComponent);
+    popover.present({
+      ev: myEvent
+    });
   }
 
 }
