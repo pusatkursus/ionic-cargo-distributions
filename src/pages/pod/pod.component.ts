@@ -134,91 +134,46 @@ export class PodComponent implements AfterViewInit {
 
 
   pod() {
-    var isSignImage = false;
-    let blobArr = [] ;
-
-    if (this.signatureImage && this.myPhoto) {
-      
-      isSignImage = true;
-      let node = document.getElementById('signImage');
-      domtoimage.toBlob(node)
+    var firstImg,secondImg;
+    if (this.signatureImage || this.myPhoto) {
+      if(this.signatureImage){
+        firstImg = {node : document.getElementById('signImage'),
+                    alias : "signatureImage",
+                    name : 'signatureImage.jpg'};
+        if(this.myPhoto)
+          secondImg = {node : document.getElementById('myPhotoId'),
+          alias : "photoImage",
+          name : 'photoImage.jpg'};
+      }
+      else{
+        firstImg = {node : document.getElementById('myPhotoId'),
+        alias : "photoImage",
+        name : 'photoImage.jpg'};
+      }
+      domtoimage.toBlob(firstImg.node)
         .then((blob) => {
-          blob['name'] = 'signatureImage.jpg';
-          blobArr.push(<File>blob);
-          
-          //  this.uploader.addToQueue([blob]);
-          //  this.uploader.getNotUploadedItems()[0].alias = "signatureImage";
-          //  this.uploader.addToQueue(blobArr);
-          //  this.uploader.getNotUploadedItems()[0].alias = "signatureImage";
-      
-          if (this.myPhoto) {
-            let node = document.getElementById('myPhotoId');
-            domtoimage.toBlob(node)
+          blob['name'] = firstImg.name;
+          this.uploader.addToQueue([blob]);
+          this.uploader.getNotUploadedItems()[0].alias = firstImg.alias;
+
+          if (secondImg) {
+            domtoimage.toBlob(secondImg.node)
               .then((blob) => {
-                blob['name'] = 'photoImage.jpg';
-                blobArr.push(<File>blob);
-               /*  if (isSignImage)
-                  // this.uploader.getNotUploadedItems()[1].alias = "photoImage";
-                  console.log("new alias one");
-                else
-                  // this.uploader.getNotUploadedItems()[0].alias = "photoImage";
-                  console.log("new alias two");
-                this.uploadCall(); */
-                this.uploader.addToQueue(blobArr);
+                blob['name'] = secondImg.name;
+                this.uploader.addToQueue([blob]);
+                this.uploader.getNotUploadedItems()[1].alias = secondImg.alias;
                 this.uploadCall();
               });
-            }   
-          }); 
-        }
-        else{
-        if(this.signatureImage){
-          isSignImage = true;
-          let node = document.getElementById('signImage');
-          domtoimage.toBlob(node)
-            .then((blob) => {
-              blob['name'] = 'signatureImage.jpg';       
-              blobArr.push(<File>blob);
-              this.uploader.addToQueue(blobArr);
-              console.log(this.uploader);
-
-          this.uploadCall();
-        }); 
-      }
-
-        if(this.myPhoto){
-          console.log("pic");
-
-          let node = document.getElementById('myPhotoId');
-          domtoimage.toBlob(node)
-            .then((blob) => {
-              console.log(blob);
-              blob['name'] = 'photoImage.jpg';
-              console.log(blob);
-              blobArr.push(<File>blob);
-             console.log(blobArr);
-              console.log(this.uploader);
-             /*  if (isSignImage)
-                // this.uploader.getNotUploadedItems()[1].alias = "photoImage";
-                console.log("new alias one");
-              else
-                // this.uploader.getNotUploadedItems()[0].alias = "photoImage";
-                console.log("new alias two");
-              this.uploadCall(); */
-              this.uploader.addToQueue(blobArr);
-        console.log(this.uploader);
-        
-          this.uploadCall();
+          } else {
+            this.uploadCall();
+          }
         });
-        }
-      }
+    }
     // });
   }
 
   uploadCall() {
-    console.log(" ################");
-    console.log( this.uploader);
-    console.log(" ################");
-   this.uploader.uploadAll();
+   this.uploader.uploadAllFiles();
     this.hasTripStarted = !this.hasTripStarted;
     if (this.hasTripStarted) {
       alert("Proof of Delivery Created!");
