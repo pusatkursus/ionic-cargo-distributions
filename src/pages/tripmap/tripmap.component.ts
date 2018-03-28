@@ -1,5 +1,7 @@
+import { AuthService } from './../../app/auth.service';
 import { Component, ViewChild, ElementRef, OnInit,Input } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation';
+
 
 declare var google: any;
 
@@ -20,11 +22,13 @@ export class TripmapComponent implements OnInit {
 
 
   map: any;
+  bounds :any;
 
-  constructor( public geolocation: Geolocation) { }
+  constructor( public geolocation: Geolocation,public auth :AuthService) { }
 
   ngOnInit() {
     setTimeout(() => {
+      this.bounds = new google.maps.LatLngBounds();
       const location = new google.maps.LatLng(13.0005618, 80.2478447);
 
       const options = {
@@ -33,12 +37,13 @@ export class TripmapComponent implements OnInit {
         streetViewControl: false,
         fullscreenControl: false,
       };
-
+      
+      this.bounds = new google.maps.LatLngBounds();
       this.map = new google.maps.Map(this.contentPlaceholder.nativeElement, options);
       this.getMarkers();
       google.maps.event.trigger(this.map, 'resize');
     }, 1000);
-    console.log(this.triplistdata);
+    
   }
 
   ngAfterViewInit() {
@@ -70,12 +75,20 @@ export class TripmapComponent implements OnInit {
     this.map.fitBounds(bounds);
   }
 
+
   addMarkersToMap(triplist) {
     var position = new google.maps.LatLng(triplist.latitude, triplist.longitude);
-    var triplistMarker = new google.maps.Marker({ position: position, title: triplist.name, map: this.map });
+    var triplistMarker = new google.maps.Marker(
+      { position: position,
+         title: triplist.name,
+          map: this.map ,
+         icon:'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld='+ (triplist.sequenceNo ) +'|FF776B|000000'
+      }
+      ); 
     triplistMarker.setMap(this.map);
     return triplistMarker;
   }
 
-
+  
 }
+

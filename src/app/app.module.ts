@@ -25,6 +25,8 @@ import { NativeStorage } from '@ionic-native/native-storage';
 import { FileUploadModule} from 'ng2-file-upload';
 import { FileUploader} from 'ng2-file-upload';
 import { FileUploaderCustom } from './fileuploadercustom';
+import { Diagnostic } from '@ionic-native/diagnostic';
+import { LaunchNavigator } from '@ionic-native/launch-navigator';
 
 @NgModule({
   declarations: [
@@ -63,6 +65,8 @@ import { FileUploaderCustom } from './fileuploadercustom';
     SplashScreen,
     Geolocation,
     File,
+    Diagnostic,
+    LaunchNavigator,
     NativeStorage,
     {provide:FileUploader,useClass:FileUploader,deps:[]},
     {provide:FileUploaderCustom, useClass:FileUploaderCustom,deps:[]},

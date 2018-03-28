@@ -25,7 +25,7 @@ export class FileUploaderCustom extends FileUploader {
       if (typeof item._file.size !== 'number') {
         throw new TypeError('The file specified is no longer valid');
       }
-      sendable.append("files", item._file, item.file.name);
+      sendable.append(item.alias, item._file, item.file.name);
     }
 
     if (this.options.additionalParameter !== undefined) {

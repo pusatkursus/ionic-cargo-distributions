@@ -13,6 +13,8 @@ import { NativeStorage } from '@ionic-native/native-storage';
 import { FileUploader } from 'ng2-file-upload';
 import * as domtoimage from 'dom-to-image';
 import {FileUploaderCustom} from '../../app/fileuploadercustom'
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/Rx';
 
 @Component({
   selector: 'app-map',
@@ -36,7 +38,7 @@ export class PodComponent implements AfterViewInit {
   consigneePhoneNo;
   locationAddress;
   weightTonnage;
-
+  vehicletripId ;
   
 
   constructor(
@@ -58,11 +60,13 @@ export class PodComponent implements AfterViewInit {
     this.triplistdata = navParams.get('triplistinfo');
     this.Comments = navParams.get('Comments');
     this.deliverPerson = navParams.get('deliverperson');
+    this.vehicletripId = navParams.get('vehicletripId');
+    console.log(this.vehicletripId);
   }
 
   ngAfterViewInit() {
 
-    console.log("i am here");
+    this.newupdation();
 
     this.name = this.triplistdata.name ;
     this.consigneeName = this.triplistdata.consigneeName;
@@ -78,16 +82,15 @@ export class PodComponent implements AfterViewInit {
     });
     this.uploader.onBuildItemForm = (item, form) => {
       let userId = this.auth.getUserId();
-      console.log(userId);
-
       form.append("proofOfDeliveryInput", JSON.stringify({
         pickup_request_vehicle_trip_id: this.pickupRequestVehicleTripId,
         delivered_to_person: this.deliverPerson,
         user_id: userId,
+        delivered_at_latitude : this.auth.getLat().lat, 
+        delivered_at_longitude : this.auth.getLat().log,
         delivered_date: new Date().toISOString().split("T")[0].split("-").join('/'),
         delivered_time: new Date().toTimeString().split(":").splice(0, 2).join(":"),
         comment: this.Comments,
-        
       }));
     };
   }
@@ -105,7 +108,7 @@ export class PodComponent implements AfterViewInit {
 
   openSignatureModel() {
     setTimeout(() => {
-      let modal = this.modalController.create(SignatureComponent, { pickupRequestVehicleTripId: this.pickupRequestVehicleTripId, triplist:this.triplistdata,deliverperson :this.deliverPerson,Comments:this.Comments });
+      let modal = this.modalController.create(SignatureComponent, { pickupRequestVehicleTripId: this.pickupRequestVehicleTripId, triplist:this.triplistdata,deliverperson :this.deliverPerson,Comments:this.Comments,vehicletripId:this.vehicletripId });
       modal.present();
     }, 300);
   }
@@ -132,102 +135,102 @@ export class PodComponent implements AfterViewInit {
     this.myPhoto = "data:image/JPEG;base64," + imgUri;
   }
 
-
   pod() {
-    var isSignImage = false;
-    let blobArr = [] ;
-
-    if (this.signatureImage && this.myPhoto) {
-      
-      isSignImage = true;
-      let node = document.getElementById('signImage');
-      domtoimage.toBlob(node)
+    var firstImg,secondImg;
+    if (this.signatureImage || this.myPhoto) {
+      if(this.signatureImage){
+        firstImg = {node : document.getElementById('signImage'),
+                    alias : "signatureImage", 
+                    name : 'signatureImage.jpg'};
+        if(this.myPhoto)
+          secondImg = {node : document.getElementById('myPhotoId'),
+          alias : "photoImage",
+          name : 'photoImage.jpg'};
+      }
+      else{
+        firstImg = {node : document.getElementById('myPhotoId'),
+        alias : "photoImage",
+        name : 'photoImage.jpg'};
+      }
+      domtoimage.toBlob(firstImg.node)
         .then((blob) => {
-          blob['name'] = 'signatureImage.jpg';
-          blobArr.push(<File>blob);
-          
-          //  this.uploader.addToQueue([blob]);
-          //  this.uploader.getNotUploadedItems()[0].alias = "signatureImage";
-          //  this.uploader.addToQueue(blobArr);
-          //  this.uploader.getNotUploadedItems()[0].alias = "signatureImage";
-      
-          if (this.myPhoto) {
-            let node = document.getElementById('myPhotoId');
-            domtoimage.toBlob(node)
+          blob['name'] = firstImg.name;
+          this.uploader.addToQueue([blob]);
+          this.uploader.getNotUploadedItems()[0].alias = firstImg.alias;
+
+          if (secondImg) {
+            domtoimage.toBlob(secondImg.node)
               .then((blob) => {
-                blob['name'] = 'photoImage.jpg';
-                blobArr.push(<File>blob);
-               /*  if (isSignImage)
-                  // this.uploader.getNotUploadedItems()[1].alias = "photoImage";
-                  console.log("new alias one");
-                else
-                  // this.uploader.getNotUploadedItems()[0].alias = "photoImage";
-                  console.log("new alias two");
-                this.uploadCall(); */
-                this.uploader.addToQueue(blobArr);
+                blob['name'] = secondImg.name;
+                this.uploader.addToQueue([blob]);
+                this.uploader.getNotUploadedItems()[1].alias = secondImg.alias;
                 this.uploadCall();
               });
-            }   
-          }); 
-        }
-        else{
-        if(this.signatureImage){
-          isSignImage = true;
-          let node = document.getElementById('signImage');
-          domtoimage.toBlob(node)
-            .then((blob) => {
-              blob['name'] = 'signatureImage.jpg';       
-              blobArr.push(<File>blob);
-              this.uploader.addToQueue(blobArr);
-              console.log(this.uploader);
-
-          this.uploadCall();
-        }); 
-      }
-
-        if(this.myPhoto){
-          console.log("pic");
-
-          let node = document.getElementById('myPhotoId');
-          domtoimage.toBlob(node)
-            .then((blob) => {
-              console.log(blob);
-              blob['name'] = 'photoImage.jpg';
-              console.log(blob);
-              blobArr.push(<File>blob);
-             console.log(blobArr);
-              console.log(this.uploader);
-             /*  if (isSignImage)
-                // this.uploader.getNotUploadedItems()[1].alias = "photoImage";
-                console.log("new alias one");
-              else
-                // this.uploader.getNotUploadedItems()[0].alias = "photoImage";
-                console.log("new alias two");
-              this.uploadCall(); */
-              this.uploader.addToQueue(blobArr);
-        console.log(this.uploader);
-        
-          this.uploadCall();
+          } else {
+            this.uploadCall();
+          }
         });
-        }
-      }
+    }
     // });
   }
 
+
+
   uploadCall() {
-    console.log(" ################");
-    console.log( this.uploader);
-    console.log(" ################");
-   this.uploader.uploadAll();
+    this.uploader.uploadAllFiles();
     this.hasTripStarted = !this.hasTripStarted;
     if (this.hasTripStarted) {
       alert("Proof of Delivery Created!");
-      this.navCtrl.push(HomeComponent);
+       this.newupdation();
+       this.navCtrl.push(HomeComponent);
     }
     else {
       alert("Error in creating Proof of Delivery");
     }
   }
+
+  newupdation(){
+    Observable.interval(2000 * 60).subscribe(x => {
+      this.updateVehicleLocationxxx();
+    });
+  }
+
+  updateVehicleLocationxxx(){
+    let str ={
+      vehicleTripId :this.vehicletripId,
+      loggedInUserId : this.auth.getUserId(),
+      vehicleLocationLatitude : this.auth.getLat().lat,
+      vehicleLocationLongitude: this.auth.getLat().log
+    }
+
+    this.http.post(this.auth.getRemoteUrl() + '/cargo/api/update_vehicleLocation', str, { headers: this.auth.getRequestJSONHeaders() }).subscribe((data) => {
+      console.log(data);
+    }, err => {
+      console.log(err);
+    }
+    )
+  }
+
+
+ 
+
+  // updateVehicleLocation(){
+  //   let str ={
+  //     vehicleTripId :this.vehicletripId,
+  //     loggedInUserId : this.auth.getUserId(),
+  //     vehicleLocationLatitude : this.auth.getLat().lat,
+  //     vehicleLocationLongitude: this.auth.getLat().log
+  //   } 
+  // Observable.timer(0, 120000)  // starting immediately, calling every 120seconds (or 2 minutes)
+  // .switchMap(() => this.http.post(this.auth.getRemoteUrl() + '/cargo/api/update_vehicleLocation', str, { headers: this.auth.getRequestJSONHeaders() }))  
+  // .subscribe(resp => {
+  //   console.log(resp);
+  //   },
+  //   err => {
+  //     console.log(err);
+  //   }
+  // )
+  // }
 
   cancel() {
     this.navCtrl.push(HomeComponent);

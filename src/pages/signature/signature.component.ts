@@ -22,13 +22,14 @@ export class SignatureComponent implements OnInit {
   public triplist ;
   public deliverperson ;
   public Comments ;
-
+  vehicletripId ;
   constructor(public navCtrl: NavController,public navParams:NavParams) 
     { 
     this.pickupRequestVehicleTripId = navParams.get('pickupRequestVehicleTripId');
     this.triplist = navParams.get('triplist');
     this.Comments = navParams.get('Comments');
     this.deliverperson = navParams.get('deliverperson');
+    this.vehicletripId = navParams.get('vehicletripId');
     
     }
 
@@ -43,12 +44,12 @@ export class SignatureComponent implements OnInit {
   }
 
   drawCancel() {
-    this.navCtrl.push(PodComponent,{pickupRequestVehicleTripId:this.pickupRequestVehicleTripId,triplistinfo:this.triplist,deliverperson :this.deliverperson,Comments:this.Comments});
+    this.navCtrl.push(PodComponent,{pickupRequestVehicleTripId:this.pickupRequestVehicleTripId,triplistinfo:this.triplist,deliverperson :this.deliverperson,Comments:this.Comments, vehicletripId:this.vehicletripId});
   }
 
    drawComplete() {
     this.signatureImage = this.signaturePad.toDataURL();
-    this.navCtrl.push(PodComponent, {signatureImage: this.signatureImage,pickupRequestVehicleTripId:this.pickupRequestVehicleTripId,triplistinfo:this.triplist, deliverperson :this.deliverperson, Comments:this.Comments});
+    this.navCtrl.push(PodComponent, {signatureImage: this.signatureImage,pickupRequestVehicleTripId:this.pickupRequestVehicleTripId,triplistinfo:this.triplist, deliverperson :this.deliverperson, Comments:this.Comments,vehicletripId:this.vehicletripId});
   }
 
   drawClear() {
