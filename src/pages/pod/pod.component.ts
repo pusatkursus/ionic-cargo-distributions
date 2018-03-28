@@ -140,7 +140,7 @@ export class PodComponent implements AfterViewInit {
     if (this.signatureImage || this.myPhoto) {
       if(this.signatureImage){
         firstImg = {node : document.getElementById('signImage'),
-                    alias : "signatureImage", 
+                    alias : "signatureImage",
                     name : 'signatureImage.jpg'};
         if(this.myPhoto)
           secondImg = {node : document.getElementById('myPhotoId'),
