@@ -1,12 +1,14 @@
 {
-    "name": "CargoDistributions",
-    "app_id": "",
-    "type": "ionic-angular",
-    "proxies": [{
-        "path": "/cargo",
-        "proxyUrl": "localhost:8080/cargo"
-    }],
-    "integrations": {
-        "cordova": {}
+  "name": "CargoDistributions",
+  "app_id": "",
+  "type": "ionic-angular",
+  "proxies": [
+    {
+      "path": "/cargo",
+      "proxyUrl": "35.154.80.6:8080/cargo"
     }
+  ],
+  "integrations": {
+    "cordova": {}
+  }
 }

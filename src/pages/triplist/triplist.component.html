@@ -16,6 +16,9 @@ min-height: 2.4rem !important;
   position:fixed;
   margin-bottom: 50px; 
 }
+.margin-leftbtn{
+ margin-left: 70px !important;
+}
 </style>
 <div>
   
@@ -42,9 +45,13 @@ min-height: 2.4rem !important;
 
 
         <ion-item no-margin>
-          <ion-label no-margin> {{trip.weightTonnage}} tons </ion-label>
-          <ion-label no-margin> </ion-label>
-          <ion-list no-lines no-margin class="margin-0" item-right>
+           <p no-margin item-start > {{trip.weightTonnage}} tons </p> 
+          
+          <button no-margin ion-button  class="margin-leftbtn"  icon-only clear (click)="newone(trip.latitude,trip.longitude)">
+              <ion-icon no-margin name='navigate' ></ion-icon> 
+          </button>
+          
+          <ion-list no-lines no-margin class="margin-0" item-end >
             <div *ngIf="vehicleTripStatus == 2">
               <button ion-button color="danger" clear (click)="unsuccessful(trip.pickupRequestVehicleTripId)" icon-only>
                     <ion-icon name='close-circle' style="color:red;" ></ion-icon>
@@ -57,7 +64,11 @@ min-height: 2.4rem !important;
         </ion-item>
       </ion-list>
     </ion-card>
+
+    <!-- <h3>Current Latitude: {{locationTracker.latwatch}}</h3>
+    <h3>Current Longitude: {{locationTracker.logwatch}}</h3> -->
+
   </div>
 
-  <ng-template #elseBlock>No Active Trip</ng-template>
+  <ng-template #elseBlock>No Records</ng-template>
 </div>

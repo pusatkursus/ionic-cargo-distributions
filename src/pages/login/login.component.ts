@@ -19,7 +19,9 @@ export class LoginComponent implements OnInit {
   };
   showSpinner: boolean = false;
 
-  constructor(private http: HttpClient, private auth: AuthService,public navCtrl: NavController,public toastCtrl: ToastController) { }
+  constructor(private http: HttpClient, private auth: AuthService,public navCtrl: NavController,public toastCtrl: ToastController
+    
+  ) { }
 
   ngOnInit() {
   }
@@ -54,9 +56,6 @@ export class LoginComponent implements OnInit {
       console.log("this is new errors ####### "+ err)
     }
   )}
-
-  
-
 
 }
 

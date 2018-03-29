@@ -93,4 +93,5 @@
     <plugin name="cordova-plugin-statusbar" spec="^2.4.1" />
     <engine name="browser" spec="5.0.3" />
     <engine name="android" spec="7.0.0" />
+    <plugin name="uk.co.workingedge.phonegap.plugin.launchnavigator" spec="~4.2.0" />
 </widget>

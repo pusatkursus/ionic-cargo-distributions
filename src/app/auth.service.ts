@@ -14,10 +14,13 @@ export class AuthService {
   ourcode;
   accesstoken = "null";
   contentType;
+  //remoteUrl = "http://35.154.80.6:8080";
   remoteUrl = "http://35.154.80.6:8080";
   lstorage;
+  watchLatLog;
   
-  constructor(public storage: NativeStorage) {
+  
+  constructor(public storage: NativeStorage,) {
     this.lstorage = storage? storage : localStorage; 
     if(this.lstorage.getItem(STORAGE_KEY)==null)
       this.lstorage.setItem(STORAGE_KEY,"null");
@@ -91,6 +94,16 @@ export class AuthService {
   
   getContentType(){
     return this.contentType;
+  }
+
+
+  getLat(){
+    console.log(this.watchLatLog)
+    return this.watchLatLog;
+  }
+
+  setlog(data){
+    this.watchLatLog = data;
   }
 
 }
