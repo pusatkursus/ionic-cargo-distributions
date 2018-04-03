@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
   }
 
   login(usercreds) {
+    this.auth.resetLStorage();
     this.showSpinner = true;
     let urlSearchParams = new URLSearchParams();
     urlSearchParams.append('username', usercreds.username);

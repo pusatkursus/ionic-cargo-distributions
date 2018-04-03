@@ -26,6 +26,11 @@ export class AuthService {
       this.lstorage.setItem(STORAGE_KEY,"null");
   }
 
+  resetLStorage(){
+    this.lstorage.setItem(STORAGE_KEY, "null");
+    this.lstorage.setItem(USER_ID, "null");
+  }
+
   setToken(data){
     this.lstorage.setItem(STORAGE_KEY, "Bearer "+ data.access_token);
   }
