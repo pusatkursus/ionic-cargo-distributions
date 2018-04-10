@@ -1,5 +1,5 @@
+import { Utility } from './../../app/utility';
 import { Component, ViewChild, ElementRef, OnInit, Output,EventEmitter ,NgZone  } from '@angular/core';
-
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../app/auth.service';
 import { NavController ,AlertController } from 'ionic-angular';
@@ -34,7 +34,7 @@ export class TriplistComponent implements OnInit {
   constructor(private http: HttpClient, private auth: AuthService, public navCtrl: NavController, 
     private nativeStorage: NativeStorage,private alertCtrl: AlertController ,
     public geolocation: Geolocation,public zone :NgZone,
-    private launchNavigator: LaunchNavigator
+    private launchNavigator: LaunchNavigator ,public utility : Utility
     ) { }
 
   ngOnInit(): void {
@@ -123,11 +123,14 @@ let alert = this.alertCtrl.create({
             
           if (this.vehicleTripStatus == 1) this.startTrip();
           this.http.post(this.auth.getRemoteUrl() + '/cargo/api/hub/unsuccessfull_consignments', str, { headers: this.auth.getRequestJSONHeaders() }).subscribe((data) => {
+            console.log("##### sucessfullydeleted");
+            
             console.log(data);
             
           }, err => {
             // alert("Error in marking the consignment as unsuccessfull!");
             console.log(err);
+            console.log("errror from the ok cancel ");
           }
           )
            
@@ -178,6 +181,7 @@ alert.present();
   }
 
   getData() {
+    this.utility.showloading();
     let userId = this.auth.getUserId();
 
     let urlSearchParams = new URLSearchParams();
@@ -186,27 +190,28 @@ alert.present();
    
     this.http.get(this.auth.getRemoteUrl() + '/cargo/api/retrieve_vehicleTripDriverAssigned?driverId=' + userId, { headers: this.auth.getRequestHeaders() }).subscribe((data) => {
       this.vehicleTripId = data['message'].vehicleTripId;
+      
+      console.log(data);
+      console.log("&&&&&&&&&&&&&&");
+
       this.vehicleTripStatus = data['message'].vehicleTripStatus;
       this.currentLocation();
       this.vehicledata.emit({vehicleNo:data['message'].vehicleNo, model: data['message'].vehicleModelName})
       this.hasTripStarted = this.vehicleTripStatus == 2;
       this.http.get(this.auth.getRemoteUrl() + '/cargo/api/hub/retrieve_tripsheet?vehicleTripId=' + this.vehicleTripId + '&loggedInUserId=' + userId, { headers: this.auth.getRequestHeaders() }).subscribe((data) => {
-        console.log(data);
         this.tripList = data;
         // this.tripNavigator.push(this.tripList);
         this.triplistdata.emit(data['message']);
-      }, err => {
+        this.utility.hideloading();
+      }, err => {  
         // alert("Error in getting triplist");
         console.log("Error in getting triplist");
-      }
-      )
-    }
-
-    )
+        this.utility.hideloading();
+      })
+    })
   }
 
   currentLocation(){
-    
     let data ={};
     this.geolocation.getCurrentPosition().then((resp) => {
        data ={
@@ -214,15 +219,11 @@ alert.present();
          log : resp.coords.longitude
         } 
         this.auth.setlog(data);
-
         let options = {
           frequency: 3000,
           enableHighAccuracy: true
-        };
-        
-         
+        }; 
         this.positionwatch = this.geolocation.watchPosition(options).filter((p: any) => p.code === undefined).subscribe((position: Geoposition) => {
-      
           console.log(position);
           // Run update inside of Angular's zone
           this.zone.run(() => {
@@ -233,9 +234,6 @@ alert.present();
           });
           this.auth.setlog(data);
         });
-
-
-
   }).catch((error) => {
      alert(error);
   });
@@ -243,8 +241,6 @@ alert.present();
 
 
   newone(lat,log){
-
-    console.log(lat,log);
     if (lat && log) {
         this.launchNavigator.navigate([lat, log])
         .then(

@@ -93,6 +93,8 @@ export class PodComponent implements AfterViewInit {
         comment: this.Comments,
       }));
     };
+    console.log("error from create pod ########");
+    console.log("error from take picture");
   }
 
 
@@ -125,6 +127,7 @@ export class PodComponent implements AfterViewInit {
     }).then(imageData => {
       this.displayImage(imageData);
     }, error => {
+      console.log("error from take picture");
       console.log(JSON.stringify(error));
 
     });

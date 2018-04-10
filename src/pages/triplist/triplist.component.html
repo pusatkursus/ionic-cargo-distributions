@@ -42,10 +42,8 @@ min-height: 2.4rem !important;
           <p class="font-size"><span>{{trip.consigneeName}}</span> | <span>{{trip.consigneePhoneNo}}</span></p>
           <p class="font-size" style="white-space: normal;">{{trip.locationAddress}} </p>
         </ion-item>
-
-
         <ion-item no-margin>
-           <p no-margin item-start > {{trip.weightTonnage}} tons </p> 
+           <p no-margin item-start >{{trip.weightTonnage}} tons </p> 
           
           <button no-margin ion-button  class="margin-leftbtn"  icon-only clear (click)="newone(trip.latitude,trip.longitude)">
               <ion-icon no-margin name='navigate' ></ion-icon> 

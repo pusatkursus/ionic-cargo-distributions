@@ -1,9 +1,9 @@
+import { Utility } from './utility';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-
 import { MyApp } from './app.component';
 import { HttpClient,HttpClientModule,HTTP_INTERCEPTORS} from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -27,6 +27,10 @@ import { FileUploader} from 'ng2-file-upload';
 import { FileUploaderCustom } from './fileuploadercustom';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { LaunchNavigator } from '@ionic-native/launch-navigator';
+import { UniqueDeviceID } from '@ionic-native/unique-device-id';
+import { LocationAccuracy } from '@ionic-native/location-accuracy';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+
 
 @NgModule({
   declarations: [
@@ -46,7 +50,8 @@ import { LaunchNavigator } from '@ionic-native/launch-navigator';
     IonicModule.forRoot(MyApp),
     HttpClientModule,
     FormsModule,
-    FileUploadModule
+    FileUploadModule,
+    Ng4LoadingSpinnerModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -65,9 +70,12 @@ import { LaunchNavigator } from '@ionic-native/launch-navigator';
     SplashScreen,
     Geolocation,
     File,
+    UniqueDeviceID,
     Diagnostic,
+    LocationAccuracy,
     LaunchNavigator,
     NativeStorage,
+    Utility,
     {provide:FileUploader,useClass:FileUploader,deps:[]},
     {provide:FileUploaderCustom, useClass:FileUploaderCustom,deps:[]},
     Camera,

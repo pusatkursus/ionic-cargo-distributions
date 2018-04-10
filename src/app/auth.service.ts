@@ -3,9 +3,11 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { URLSearchParams} from '@angular/http';
 import { NativeStorage } from '@ionic-native/native-storage';
 
+
+
 const STORAGE_KEY = 'accesstoken';
 const USER_ID = '';
-
+const SESSIONID ='';
 @Injectable()
 export class AuthService {
   isAuthenticated: boolean = false;
@@ -14,21 +16,25 @@ export class AuthService {
   ourcode;
   accesstoken = "null";
   contentType;
-  //remoteUrl = "http://35.154.80.6:8080";
-  remoteUrl = "http://35.154.80.6:8080";
+ // remoteUrl = "http://35.154.80.6:8080";
+   remoteUrl = "http://192.168.0.106:8080";
   lstorage;
   watchLatLog;
+  deviceInstanceId;
+  gpsStatus;
   
   
-  constructor(public storage: NativeStorage,) {
+  constructor(public storage: NativeStorage) {
     this.lstorage = storage? storage : localStorage; 
     if(this.lstorage.getItem(STORAGE_KEY)==null)
       this.lstorage.setItem(STORAGE_KEY,"null");
+      
   }
 
   resetLStorage(){
     this.lstorage.setItem(STORAGE_KEY, "null");
     this.lstorage.setItem(USER_ID, "null");
+    this.lstorage.setItem(SESSIONID,"null");
   }
 
   setToken(data){
@@ -109,6 +115,29 @@ export class AuthService {
 
   setlog(data){
     this.watchLatLog = data;
+  }
+
+  getSessionid(){
+    return this.lstorage.getItem(SESSIONID);
+  }
+  setSessionid(id){
+    this.lstorage.setItem(SESSIONID, id);
+  }
+
+  getDeviceinstaceid(){
+    return this.deviceInstanceId ;
+  }
+  
+  setDeviceinstaceid(deviceid){
+    this.deviceInstanceId = deviceid
+  }
+
+  getGpsStatus(){
+    return this.gpsStatus ;
+  }
+  
+  setGpsStatus(gpsid){
+    this.gpsStatus = gpsid;
   }
 
 }

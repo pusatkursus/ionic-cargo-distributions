@@ -21,6 +21,7 @@
  
  
  <ion-content  padding>
+       
      <img src="assets/imgs/transity_sq_small.png" class="image-round text-center-img" alt="">
      <h3 class="login-header text-center">Login</h3>
  
@@ -28,7 +29,7 @@
          <ion-list no-lines>
              <ion-item>
                  <ion-label floating>Email-id</ion-label>
-                 <ion-input id="username" name="username" email type="text" spellcheck="false" [(ngModel)]="user.username" autocapitalize="on" #username="ngModel" required>
+                 <ion-input id="username" name="username" email type="text" spellcheck="false"  [(ngModel)]="user.username" autocapitalize="on" #username="ngModel" required>
                  </ion-input>
              </ion-item>
              <div *ngIf="username.invalid && (username.dirty || username.touched)" class="padding-error">
@@ -41,12 +42,12 @@
              </div>
              <ion-item>
                      <ion-label floating>Password</ion-label>
-                     <ion-input id="password" name="password" type="password" #password="ngModel" [(ngModel)]="user.password" required></ion-input>
-                   </ion-item>
+                     <ion-input id="password" name="password" type="password" #password="ngModel"  [(ngModel)]="user.password"  required></ion-input>
+            </ion-item>
  
              <!-- <ion-item>
                  <ion-label floating>Password</ion-label>
-                 <ion-input id="password" name="password" #password="ngModel" type="password" [(ngModel)]="user.password" required>
+                 <ion-input id="password" name="password" (ngModelChange)="gpsstauts_check()" #password="ngModel" type="password" [(ngModel)]="user.password" required>
                  </ion-input>
              </ion-item> -->
              <div *ngIf="password.invalid && (password.dirty || password.touched)" class="padding-error">
@@ -57,10 +58,14 @@
          </ion-list>
          <ion-row responsive-sm>
              <ion-col>
-                 <button ion-button outline round (click)="login(user)" [disabled]="!loginForm.form.valid" type="submit" block>Login</button>
+                 <button ion-button outline round (click)="login(user)" [disabled]="((!loginForm.form.valid) || (gpsStatus_of == false)) " type="submit" block>Login</button>
              </ion-col>
          </ion-row>
- 
+           
+         <div *ngIf="gpsStatus_of == false"  class="padding-error text-center">
+            gps is must be on .
+         </div>
+
      </form>
  </ion-content>
  
